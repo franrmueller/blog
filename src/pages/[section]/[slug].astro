@@ -1,0 +1,49 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { SECTIONS, SECTION_KEYS } from '../../site';
+import { coverUrl, formatDate, getPosts, isoDate, type Post } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const section of SECTION_KEYS) {
+    for (const post of await getPosts(section)) {
+      paths.push({ params: { section, slug: post.id }, props: { post } });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const section = post.collection;
+const cover = coverUrl(post.data.cover);
+const { Content } = await render(post);
+---
+
+<Base title={post.data.title} description={post.data.description} image={cover} type="article" preloadImage={cover} preloadBody>
+  <article>
+    <img
+      class="cover"
+      src={cover}
+      alt=""
+      fetchpriority="high"
+      decoding="async"
+      transition:name={`cover-${section}-${post.id}`}
+      transition:animate="initial"
+    />
+    <div class="column">
+      <h1 class="post-heading">{post.data.title}</h1>
+      <p class="post-date">
+        <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date)}</time>
+      </p>
+      <div class="prose post-body">
+        <Content />
+      </div>
+      <p class="post-back"><a href={`/${section}/`}>Back to {SECTIONS[section].title}</a></p>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import PostStrips from '../components/PostStrips.astro';
+import { SECTIONS, SECTION_KEYS, SITE } from '../site';
+import { coverUrl, getPosts } from '../lib/posts';
+
+const columns = await Promise.all(
+  SECTION_KEYS.map(async (section) => ({
+    section,
+    title: SECTIONS[section].title,
+    posts: await getPosts(section),
+  })),
+);
+
+const firstPost = columns.flatMap((column) => column.posts)[0];
+const preloadImage = firstPost ? coverUrl(firstPost.data.cover) : undefined;
+---
+
+<Base wide preloadImage={preloadImage}>
+  <div class="column column-wide">
+    <h1 class="sr-only">{SITE.name}</h1>
+    <div class="home">
+      {
+        columns.map(({ section, title, posts }, index) => (
+          <>
+            {index > 0 && <div class="home-divider" aria-hidden="true" />}
+            <section class="home-section">
+              <h2 class="home-label">
+                <a href={`/${section}/`}>{title}</a>
+              </h2>
+              <PostStrips posts={posts} />
+            </section>
+          </>
+        ))
+      }
+    </div>
+  </div>
+</Base>

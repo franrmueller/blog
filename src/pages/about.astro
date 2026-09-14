@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site';
+---
+
+<Base title="About" description={`About ${SITE.name}.`} preloadBody>
+  <div class="column page">
+    <h1 class="sr-only">About</h1>
+    <div class="prose">
+      <!-- TODO (Fran): replace with two or three sentences about yourself. -->
+      <p>TODO: two or three sentences about Fran go here.</p>
+      <p><a href={SITE.linkedin} rel="me">LinkedIn</a></p>
+    </div>
+  </div>
+</Base>

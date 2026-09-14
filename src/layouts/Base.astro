@@ -1,0 +1,80 @@
+---
+import { Font } from 'astro:assets';
+import '../styles/global.css';
+import { SITE } from '../site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Root-relative or absolute URL of the page's cover, for link previews. */
+  image?: string;
+  type?: 'website' | 'article';
+  /** Home uses the wider column; header and footer follow it. */
+  wide?: boolean;
+  /** The largest image above the fold, requested before the fonts. */
+  preloadImage?: string;
+  /** Pages with a prose body preload the body font. */
+  preloadBody?: boolean;
+}
+
+const { title, description = SITE.description, image, type = 'website', wide = false, preloadImage, preloadBody = false } = Astro.props;
+
+const column = wide ? 'column column-wide' : 'column';
+
+const pageTitle = title ? `${title} · ${SITE.name}` : SITE.name;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = image ? new URL(image, Astro.site) : undefined;
+
+const nav = [
+  { key: 'work', href: '/work/', label: 'Work' },
+  { key: 'mind', href: '/mind/', label: 'Mind' },
+  { key: 'about', href: '/about/', label: 'About' },
+];
+
+const path = Astro.url.pathname.replace(/\/$/, '');
+const currentSection = path.split('/')[1];
+const current = (key: string) => {
+  if (currentSection !== key) return undefined;
+  return path === `/${key}` ? 'page' : 'true';
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0f14" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f2ec" />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title ?? SITE.name} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <Font cssVariable="--font-serif" preload={[{ style: 'normal' }]} />
+    <Font cssVariable="--font-sans" preload={[{ style: 'normal' }]} />
+    {preloadBody ? <Font cssVariable="--font-body" preload={[{ style: 'normal', weight: 400 }]} /> : <Font cssVariable="--font-body" />}
+  </head>
+  <body>
+    <header class={`site-header ${column}`}>
+      <a class="site-name" href="/">{SITE.name}</a>
+      <nav class="site-nav" aria-label="Sections">
+        {nav.map((item) => <a href={item.href} aria-current={current(item.key)}>{item.label}</a>)}
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class={`site-footer ${column}`}>
+      <p>{SITE.name}</p>
+    </footer>
+  </body>
+</html>

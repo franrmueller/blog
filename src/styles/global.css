@@ -1,0 +1,510 @@
+/* ---------- Tokens ---------- */
+
+:root {
+  --bg: #0b0f14;
+  --text: #d6d9de;
+  /* Brief: #6f7680. That is 4.19:1 on the background; this passes WCAG AA (4.75:1). */
+  --muted: #787f89;
+  --accent: #e07a6a;
+
+  --measure: 65ch;
+  --gutter: 1.25rem;
+  --cover-ratio: 3 / 1;
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f5f2ec;
+    --text: #1c1e22;
+    /* Brief: #7b7f86 (3.6:1 on paper) and the same coral (2.6:1 on paper).
+       Both fail WCAG AA, so muted is darkened and the coral is deepened
+       to the same hue at 4.7:1. */
+    --muted: #686c73;
+    --accent: #b34d3c;
+    color-scheme: light;
+  }
+}
+
+@media (max-width: 40em) {
+  :root {
+    --cover-ratio: 3 / 2;
+  }
+}
+
+/* ---------- Motion: the only two things that move ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Native cross-document view transitions. The cover morphs between the
+     list thumbnail and the post header because both carry the same
+     view-transition-name; everything else cross-fades. */
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 300ms;
+    animation-timing-function: ease;
+  }
+
+  a {
+    transition: color 150ms ease;
+  }
+
+  /* A home strip is much wider than it is tall, the post header is 3:1.
+     Let both snapshots fill the morphing box instead of stretching. */
+  .cover,
+  .strip-cover {
+    view-transition-class: cover;
+  }
+
+  ::view-transition-old(*.cover),
+  ::view-transition-new(*.cover) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: clip;
+  }
+}
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+a {
+  color: inherit;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+img {
+  max-width: 100%;
+}
+
+.column {
+  width: 100%;
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Header and footer ---------- */
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+  padding-block: 1.5rem;
+}
+
+/* Font sizes sit on the children, never on a .column element: the 65ch
+   measure resolves against the font size of the element that uses it. */
+.site-name,
+.site-nav {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.site-name {
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.site-nav a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.site-nav a[aria-current] {
+  color: var(--accent);
+}
+
+.site-nav a:hover {
+  color: var(--accent);
+}
+
+.site-footer {
+  padding-block: 4rem 2rem;
+  color: var(--muted);
+}
+
+.site-footer p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.site-footer a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+/* ---------- Covers ---------- */
+
+.cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--cover-ratio);
+  object-fit: cover;
+  background: var(--bg);
+}
+
+/* ---------- Post lists (home and sections) ---------- */
+
+.posts {
+  list-style: none;
+  margin: 0;
+  padding: 1rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+.post-link {
+  display: block;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.post-link:hover {
+  color: var(--accent);
+}
+
+.post-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.85rem;
+  line-height: 1.15;
+  margin: 1rem 0 0.3rem;
+}
+
+.post-date {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.posts-empty {
+  color: var(--muted);
+  padding-block: 1rem;
+}
+
+/* ---------- Single post ---------- */
+
+.post-heading {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 1.75rem + 1.5vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+  margin: 2.5rem 0 0.75rem;
+}
+
+.post-body {
+  margin-top: 2rem;
+}
+
+.post-back {
+  margin: 3.5rem 0 0;
+  font-size: 0.95rem;
+}
+
+.post-back a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.post-back a:hover {
+  color: var(--accent);
+}
+
+/* ---------- Prose (Markdown body and the About page) ---------- */
+
+/* Body text is Newsreader, a text serif; the chrome stays in the sans. */
+.prose {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}
+
+.prose p,
+.prose ul,
+.prose ol,
+.prose pre,
+.prose blockquote,
+.prose figure,
+.prose table {
+  margin: 0 0 1.4em;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 2em 0 0.5em;
+}
+
+.prose h2 {
+  font-size: 1.9rem;
+}
+
+.prose h3 {
+  font-size: 1.5rem;
+}
+
+.prose h4 {
+  font-size: 1.25rem;
+}
+
+.prose a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--muted);
+  text-underline-offset: 0.18em;
+}
+
+.prose a:hover {
+  text-decoration-color: currentcolor;
+}
+
+.prose blockquote {
+  padding: 0;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.prose blockquote p {
+  margin-bottom: 0.6em;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.25em;
+}
+
+.prose li + li {
+  margin-top: 0.35em;
+}
+
+.prose img {
+  display: block;
+  height: auto;
+}
+
+.prose hr {
+  border: 0;
+  margin: 2.5em 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+.prose hr::before {
+  content: '· · ·';
+  letter-spacing: 0.5em;
+}
+
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+
+.prose pre {
+  overflow-x: auto;
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  background: color-mix(in srgb, var(--text) 7%, var(--bg));
+  border-radius: 4px;
+}
+
+.prose pre code {
+  font-size: 1em;
+}
+
+.page {
+  padding-block: 1rem 2rem;
+}
+
+/* ---------- Narrow screens ---------- */
+
+@media (max-width: 40em) {
+  .posts {
+    gap: 2.5rem;
+  }
+
+  .post-heading {
+    margin-top: 1.75rem;
+  }
+}
+
+/* ---------- Home: Work and Mind side by side ---------- */
+
+.column-wide {
+  --measure: 60rem;
+}
+
+.home {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+  column-gap: 2.5rem;
+  padding-block: 1rem 2rem;
+}
+
+.home-divider {
+  background: color-mix(in srgb, var(--muted) 35%, transparent);
+}
+
+.home-label {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+}
+
+.home-label a {
+  text-decoration: none;
+}
+
+.strips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* One post: a wide, short strip with the cover behind the title. */
+.strip {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  height: 4.5rem;
+  padding-inline: 1.1rem;
+  overflow: hidden;
+  color: #e6e8eb;
+  text-decoration: none;
+}
+
+.strip-cover {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Darkens the left of the cover so the title reads in both themes. */
+.strip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to right,
+    rgb(11 15 20 / 0.82),
+    rgb(11 15 20 / 0.5) 55%,
+    rgb(11 15 20 / 0.2)
+  );
+}
+
+.strip-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.2rem;
+  line-height: 1.2;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.strip:hover {
+  color: var(--accent);
+}
+
+/* The two columns and the vertical line stay side by side at every width. */
+@media (max-width: 40em) {
+  .home {
+    column-gap: 1.25rem;
+  }
+
+  .home-label {
+    font-size: 1.3rem;
+  }
+
+  .strip {
+    padding-inline: 0.75rem;
+  }
+
+  .strip-title {
+    font-size: 1rem;
+    -webkit-line-clamp: 3;
+  }
+}
