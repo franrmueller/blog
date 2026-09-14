@@ -19,6 +19,8 @@ const preloadImage = firstPost ? coverUrl(firstPost.data.cover) : undefined;
 <Base wide preloadImage={preloadImage}>
   <div class="column column-wide">
     <h1 class="sr-only">{SITE.name}</h1>
+    <!-- TODO (Fran): replace with a few lines about yourself and why this site exists. Links are fine here. -->
+    <p class="home-about">TODO: a few lines about Fran, and why this site exists, go here.</p>
     <div class="home">
       {
         columns.map(({ section, title, posts }, index) => (

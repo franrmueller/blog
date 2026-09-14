@@ -1,7 +1,8 @@
 export const SITE = {
   name: 'Francisco Rodriguez Müller',
+  /** Shown in the footer. */
+  shortName: 'Fran Müller',
   description: 'Notes on enterprise technology, and on the mind.',
-  linkedin: 'https://www.linkedin.com/in/franrmueller',
 } as const;
 
 export const SECTIONS = {
