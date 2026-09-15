@@ -10,6 +10,8 @@
   --measure: 65ch;
   --gutter: 1.25rem;
   --cover-ratio: 3 / 1;
+  /* 1 in the light theme, 0 in the dark one; drives the sun/moon icon. */
+  --sun: 0;
 
   color-scheme: dark;
 }
@@ -24,6 +26,7 @@
   --text: #1c1e22;
   --muted: #686c73;
   --accent: #b34d3c;
+  --sun: 1;
   color-scheme: light;
 }
 
@@ -33,6 +36,7 @@
     --text: #1c1e22;
     --muted: #686c73;
     --accent: #b34d3c;
+    --sun: 1;
     color-scheme: light;
   }
 }
@@ -61,8 +65,13 @@
   }
 
   a,
-  .theme button {
+  .theme-toggle {
     transition: color 150ms ease;
+  }
+
+  /* The sun becomes the moon in place. */
+  .sun-moon {
+    transition: --sun 300ms ease;
   }
 
   /* A home strip is much wider than it is tall, the post header is 3:1.
@@ -183,13 +192,15 @@ img {
   gap: 1.5rem;
 }
 
-/* Sun and moon. The active theme's icon is coral, like the active nav item. */
-.theme {
-  display: flex;
-  gap: 0.6rem;
+/* One icon for the theme: a sun in the light theme, a moon in the dark one.
+   A masked circle bites into the disc to make the crescent; the rays fold away. */
+@property --sun {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
 }
 
-.theme button {
+.theme-toggle {
   display: inline-flex;
   padding: 0;
   border: 0;
@@ -198,29 +209,25 @@ img {
   cursor: pointer;
 }
 
-.theme svg {
-  display: block;
-  width: 1.1rem;
-  height: 1.1rem;
-}
-
-.theme button:hover,
-.theme button[aria-pressed='true'],
-:root[data-theme='light'] .theme-light,
-:root[data-theme='dark'] .theme-dark {
+.theme-toggle:hover {
   color: var(--accent);
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .theme-light {
-    color: var(--accent);
-  }
+.sun-moon {
+  display: block;
+  width: 1.2rem;
+  height: 1.2rem;
+  overflow: visible;
 }
 
-@media not (prefers-color-scheme: light) {
-  :root:not([data-theme]) .theme-dark {
-    color: var(--accent);
-  }
+.sun-moon .hole {
+  transform: translate(calc((1 - var(--sun)) * -5px), calc((1 - var(--sun)) * 5px));
+}
+
+.sun-moon .rays {
+  transform-origin: 12px 12px;
+  transform: scale(var(--sun));
+  opacity: var(--sun);
 }
 
 .site-nav {
