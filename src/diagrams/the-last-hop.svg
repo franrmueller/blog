@@ -9,20 +9,20 @@
   <text x="290" y="135" text-anchor="middle">Cloud Connector</text>
   <text class="small" x="290" y="174" text-anchor="middle">the destination decides</text>
 
-  <path class="flow" d="M370 130c60 0 60-60 120-60h120"/>
-  <path class="flow" d="M602 65l8 5-8 5"/>
-  <path class="dim dash" d="M370 130c60 0 60 60 120 60h120"/>
-  <path class="dim" d="M602 185l8 5-8 5"/>
+  <path class="flow" d="M370 130c60 0 60-60 120-60h90"/>
+  <path class="flow" d="M572 65l8 5-8 5"/>
+  <path class="dim dash" d="M370 130c60 0 60 60 120 60h90"/>
+  <path class="dim" d="M572 185l8 5-8 5"/>
 
-  <rect class="box" x="620" y="30" width="160" height="80" rx="4"/>
-  <text x="700" y="56" text-anchor="middle">On-premise SAP</text>
-  <text class="small accent" x="700" y="78" text-anchor="middle">principal propagation</text>
-  <text class="small" x="700" y="96" text-anchor="middle">arrives as the real user</text>
+  <rect class="box" x="580" y="30" width="210" height="80" rx="4"/>
+  <text x="685" y="56" text-anchor="middle">On-premise SAP</text>
+  <text class="small accent" x="685" y="78" text-anchor="middle">principal propagation</text>
+  <text class="small" x="685" y="96" text-anchor="middle">arrives as the real user</text>
 
-  <rect class="box" x="620" y="150" width="160" height="80" rx="4"/>
-  <text x="700" y="176" text-anchor="middle">On-premise SAP</text>
-  <text class="small" x="700" y="198" text-anchor="middle">not configured</text>
-  <text class="small" x="700" y="216" text-anchor="middle">falls back to a technical user</text>
+  <rect class="box" x="580" y="150" width="210" height="80" rx="4"/>
+  <text x="685" y="176" text-anchor="middle">On-premise SAP</text>
+  <text class="small" x="685" y="198" text-anchor="middle">configured with a technical user</text>
+  <text class="small" x="685" y="216" text-anchor="middle">every call arrives as that user</text>
 
   <text class="small" x="490" y="56" text-anchor="middle">the identity survives</text>
   <text class="small" x="490" y="222" text-anchor="middle">no error, every test passes</text>

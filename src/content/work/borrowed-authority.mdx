@@ -2,12 +2,12 @@
 title: "Borrowed authority"
 date: 2026-09-15
 cover: spiral-path.webp
-description: "An AI agent inside SAP has an identity, but no permissions of its own. It carries whoever is asking. Three pictures of what that means."
+description: "An AI agent inside SAP has an identity of its own, but the permissions that matter belong to whoever is asking. Three pictures of what that means."
 ---
 
 import Diagram from '../../components/Diagram.astro';
 
-*The first question anyone asks about an AI agent in SAP is what it is allowed to do. It is the wrong question. The agent is not allowed to do anything. The person prompting it is.*
+*The first question anyone asks about an AI agent in SAP is what it's allowed to do. It's the wrong question, or at least the smaller one. What the agent is allowed to do is a ceiling. What actually happens is decided by the person prompting it.*
 
 In April, SAP's revised API policy sent the whole ecosystem reading fine print. Since then the interpretation has softened, mostly through FAQ updates shaped by the user groups: existing integrations are untouched, customer-built APIs are fine, customer-run MCP servers are permitted under conditions. What survived every revision is simpler than the policy. An agent reaching SAP goes through a governed crossing, and every governed crossing is, underneath, an identity assertion travelling across a trust boundary.
 
@@ -19,36 +19,40 @@ That sentence is the whole article. The rest is three pictures of it.
 
 Follow the line. The user signs in at the identity provider and receives a token. The agent carries that token forward; it holds no SAP credentials of its own, at any point. The gateway exchanges the token and owns the connection into SAP. What arrives at the SAP application is a call from the user. The agent was in the chain. It was never in charge of it.
 
-The agent does have an identity. In SAP Cloud Identity Services it lives in the Identity Directory next to the humans, with a Global User ID, and it is provisioned, scoped and eventually decommissioned like an employee. That identity exists so the audit log can say which agent acted. Its authority is a different thing, and it is never its own.
+The agent does have an identity. In SAP Cloud Identity Services it lives in the Identity Directory next to the humans, with a Global User ID of its own, and it is provisioned, scoped and eventually decommissioned like an employee. That identity does two jobs. It lets the audit log say which agent acted, and it carries the agent's scope: which agents it may talk to, which tools it may call. What it doesn't carry is the authority to change anything in a business process. That comes from the user, and it arrives fresh with every request.
 
 ## One agent, many authorities
 
 <Diagram name="one-agent-many-authorities" />
 
-Because the authority is borrowed, one agent behaves like many. Prompted by an accounts-payable clerk, it can post an invoice within that clerk's limits and nothing more. Prompted by a controller, it can release a blocked one. Prompted by someone with no finance role, it sees nothing. Nobody assigned roles to the agent for any of this. The roles did not move to the agent; the agent moved to the roles, one request at a time.
+What the agent can do on a given request is the intersection of two things: the scope its identity was given at design time, and the authorizations of the person prompting it right now. The first is fixed. The second changes with every prompt, which is why one agent behaves like many. Prompted by an accounts-payable clerk, it can post an invoice within that clerk's limits and nothing more. Prompted by a controller, it can release a blocked one. Prompted by someone with no finance role, it sees nothing. Nobody assigned roles to the agent for any of this. The roles didn't move to the agent; the agent moved to the roles, one request at a time.
 
 This is what makes the design defensible in front of a CISO. Segregation of duties, authorization objects, the approval matrix: all of it keeps working, because the acting user is still a real user with a real profile. The agent is a new way of issuing requests, not a new way of being authorized.
 
-The lower half of the picture is the tempting alternative. Give the agent a technical user with generous authorizations and every demo works on the first try. It also collapses the chain into a single over-privileged identity with no attribution. The log says the agent posted the document; it does not say who asked. Segregation of duties becomes decorative, because one identity can now do everything. That is precisely the failure mode that makes autonomous agents unacceptable in regulated processes, and it is the thing to refuse when someone proposes it, however reasonable it sounds in a workshop.
+The lower half of the picture is the tempting alternative. Give the agent a technical user with generous authorizations and every demo works on the first try. It also collapses the chain into a single over-privileged identity with no attribution. The log says the agent posted the document; it doesn't say who asked. Segregation of duties becomes decorative, because one identity can now do everything. That is the failure mode that makes autonomous agents unacceptable in regulated processes, and it's the thing to refuse when someone proposes it, however reasonable it sounds in a workshop.
 
 ## The last hop
 
 <Diagram name="the-last-hop" />
 
-Identity is the strongest property in the design and the easiest to lose, because it is lost quietly.
+Identity is the strongest property in the design and the easiest to lose, because it's lost quietly.
 
-For on-premise and private cloud targets the chain extends through SAP Cloud Connector, and the destination must be configured for principal propagation down to a real ABAP user. If it is not, the system falls back to a technical user. No error. Every functional test passes. The security property has simply disappeared, and nobody notices until an auditor asks who released the payment.
+For on-premise and private cloud targets the chain runs through SAP Cloud Connector, and the destination decides who arrives on the other side. Configured for principal propagation, the call reaches the ABAP system as the real user, and their authorizations apply. Configured with a technical user, which is the quicker setup and the one many landscapes already have from older integrations, every call arrives as that one user. Nothing fails. Every functional test passes. The security property has simply gone, and nobody notices until an auditor asks who released the payment.
 
-The only reliable test is a negative one: prompt the agent as a user who should be denied, and check that they are.
+Principal propagation has its own failure mode, and it's a noisy one: a user the ABAP system can't map gets rejected. The quiet failure is the technical user. So the only test worth trusting is a negative one. Prompt the agent as someone who should be denied, and check that they are.
 
 ## What does not exist yet
 
-SAP describes policy enforcement at three points: when a request enters the gateway, before each agent-to-agent handoff, and at the target application. The point between an agent and its tools is not among them; SAP has it on the roadmap for the second half of the year.
+SAP describes policy enforcement at three points: when a request enters the gateway, before each agent-to-agent handoff, and at the target application. The point between an agent and its tools isn't among them yet; SAP has it on the roadmap for the second half of 2026.
 
-Until then, last-mile authorization rests on the target system's own authorization objects. That is not nothing; SAP's authorization concept is mature. But it means the sentence you can offer an auditor today is "the agent's user has no authorization for that transaction", not "the agent cannot invoke that tool". They are different sentences.
+Until then, last-mile authorization rests on the target system's own authorization objects. That concept has decades behind it and does real work here. But it means the sentence you can offer an auditor today is "the agent's user has no authorization for that transaction", not "the agent cannot invoke that tool". An auditor will hear the difference.
+
+One more boundary worth naming. Everything above is the on-behalf-of case, where a person is on the other end of the prompt. Agents that run on their own, scheduled or event-driven, have no user to borrow from. Their own identity is the acting principal, and the scope on that identity carries the whole weight. That's a different article.
 
 ## The shift
 
 Stop asking what the agent may do. Ask whose authority it carries, and whether that authority survives every hop between the prompt and the database.
 
-If it does, the agent is exactly as safe as the person using it. If it does not, nobody knows who is acting.
+If it does, the agent is exactly as safe as the person using it. If it doesn't, nobody knows who is acting.
+
+*Reference: SAP Architecture Center, [Agent Identity](https://architecture.learning.sap.com/docs/ref-arch/140bdb), last updated May 2026.*
