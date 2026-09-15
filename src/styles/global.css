@@ -299,30 +299,19 @@ img {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.35rem 1.25rem;
-  container-type: inline-size;
+  gap: 0.25rem 1rem;
 }
 
-/* The tagline is one line, sized to fill the row. It measures 36em in the
-   italic; the name and gap take about 5.7rem. It only wraps once even the
-   smallest size would overflow (phones under ~33rem). */
+/* Small print: the name and the tagline share one size. */
+.site-footer p {
+  margin: 0;
+  font-size: 0.75rem;
+}
+
 .site-footer .site-tagline {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(0.75rem, (100cqi - 5.7rem) / 36.6, 1.5rem);
-  white-space: nowrap;
-  flex: 1;
-  min-width: 0;
-}
-
-@container (width < 33rem) {
-  .site-footer .site-tagline {
-    white-space: normal;
-  }
-}
-
-.site-footer p {
-  margin: 0;
+  /* The serif runs small; a touch larger so it matches the sans optically. */
   font-size: 0.85rem;
 }
 
