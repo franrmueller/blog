@@ -300,13 +300,25 @@ img {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.35rem 1.25rem;
+  container-type: inline-size;
 }
 
+/* The tagline is one line, sized to fill the row. It measures 36em in the
+   italic; the name and gap take about 5.7rem. It only wraps once even the
+   smallest size would overflow (phones under ~33rem). */
 .site-footer .site-tagline {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 1.05rem;
-  max-width: 40ch;
+  font-size: clamp(0.75rem, (100cqi - 5.7rem) / 36.6, 1.5rem);
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+@container (width < 33rem) {
+  .site-footer .site-tagline {
+    white-space: normal;
+  }
 }
 
 .site-footer p {
