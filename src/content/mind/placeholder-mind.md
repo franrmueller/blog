@@ -1,7 +1,7 @@
 ---
 title: "Placeholder: the silence before a thought"
 date: 2026-08-20
-cover: spiral-path.webp
+cover: rings-horizon.webp
 description: "Placeholder post so the Mind layout can be reviewed. Fran replaces this."
 ---
 

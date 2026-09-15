@@ -1,7 +1,7 @@
 ---
 title: "Placeholder: what an enterprise system remembers"
 date: 2026-09-01
-cover: rings-horizon.webp
+cover: spiral-path.webp
 description: "Placeholder post so the Work layout can be reviewed. Fran replaces this."
 ---
 
