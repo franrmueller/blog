@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" width="900" height="460" role="img" aria-label="With principal propagation, three users pass through one agent and reach SAP with three different authorizations. With a service account, they collapse into one technical user.">
+  <style>
+    text { font-family: Inter, "Segoe UI", system-ui, sans-serif; font-size: 15px; fill: #d6d9de; }
+    .small { font-size: 12.5px; fill: #787f89; }
+    .label { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .accent { fill: #e07a6a; }
+    .box { fill: none; stroke: #787f89; stroke-width: 1.25; }
+    .flow { fill: none; stroke: #e07a6a; stroke-width: 2; }
+    .dim { fill: none; stroke: #787f89; stroke-width: 1.5; }
+    .dimwide { fill: none; stroke: #787f89; stroke-width: 4; }
+  </style>
+  <rect width="900" height="460" rx="6" fill="#0b0f14"/>
+
+  <!-- Upper half: principal propagation -->
+  <text class="label accent" x="20" y="34">PRINCIPAL PROPAGATION</text>
+
+  <text x="20" y="80">Accounts-payable clerk</text>
+  <text x="20" y="120">Controller</text>
+  <text x="20" y="160">No finance role</text>
+
+  <path class="flow" d="M200 76c40 0 40 40 80 40M200 116h80M200 156c40 0 40-40 80-40"/>
+  <rect class="box" x="280" y="94" width="110" height="44" rx="4"/>
+  <text x="335" y="121" text-anchor="middle">Agent</text>
+
+  <path class="flow" d="M390 116h40"/>
+  <rect class="box" x="430" y="94" width="110" height="44" rx="4"/>
+  <text x="485" y="121" text-anchor="middle">Gateway</text>
+
+  <path class="flow" d="M540 116h40"/>
+  <rect class="box" x="580" y="94" width="80" height="44" rx="4"/>
+  <text x="620" y="121" text-anchor="middle">SAP</text>
+
+  <path class="flow" d="M660 116c20 0 20-40 40-40M660 116h40M660 116c20 0 20 40 40 40"/>
+  <text class="small" x="708" y="80">posts within the clerk's limits</text>
+  <text class="small" x="708" y="120">releases a blocked invoice</text>
+  <text class="small" x="708" y="160">sees nothing</text>
+
+  <text class="small" x="335" y="196" text-anchor="middle">one agent, three authorities, one request at a time</text>
+
+  <!-- Divider -->
+  <path d="M20 232h860" stroke="#787f89" stroke-width="0.75" stroke-opacity="0.5"/>
+
+  <!-- Lower half: service account -->
+  <text class="label" x="20" y="266" fill="#787f89">SERVICE ACCOUNT</text>
+
+  <text x="20" y="312">Accounts-payable clerk</text>
+  <text x="20" y="352">Controller</text>
+  <text x="20" y="392">No finance role</text>
+
+  <path class="dim" d="M200 308c40 0 40 40 80 40M200 348h80M200 388c40 0 40-40 80-40"/>
+  <rect class="box" x="280" y="326" width="110" height="44" rx="4"/>
+  <text x="335" y="353" text-anchor="middle">Agent</text>
+
+  <path class="dimwide" d="M390 348h40"/>
+  <rect class="box" x="430" y="326" width="110" height="44" rx="4"/>
+  <text x="485" y="349" text-anchor="middle">technical user</text>
+  <text class="small" x="485" y="388" text-anchor="middle">generous authorizations</text>
+
+  <path class="dimwide" d="M540 348h40"/>
+  <rect class="box" x="580" y="326" width="80" height="44" rx="4"/>
+  <text x="620" y="353" text-anchor="middle">SAP</text>
+
+  <path class="dimwide" d="M660 348h40"/>
+  <text class="small" x="708" y="344">everything</text>
+  <text class="small" x="708" y="362">attributed to nobody</text>
+
+  <text class="small" x="335" y="428" text-anchor="middle">three people collapse into one identity; the log says the agent did it</text>
+</svg>

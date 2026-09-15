@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="800" height="300" role="img" aria-label="The user's identity travels from the user, through the agent and the gateway, into the SAP application.">
+  <style>
+    text { font-family: Inter, "Segoe UI", system-ui, sans-serif; font-size: 15px; fill: #d6d9de; }
+    .small { font-size: 12.5px; fill: #787f89; }
+    .accent { fill: #e07a6a; }
+    .box { fill: none; stroke: #787f89; stroke-width: 1.25; }
+    .flow { fill: none; stroke: #e07a6a; stroke-width: 2; }
+    .dim { fill: none; stroke: #787f89; stroke-width: 1.25; }
+  </style>
+  <rect width="800" height="300" rx="6" fill="#0b0f14"/>
+
+  <!-- Identity provider above the user -->
+  <rect class="box" x="20" y="28" width="150" height="40" rx="4"/>
+  <text x="95" y="53" text-anchor="middle">Identity provider</text>
+  <path class="dim" d="M95 68v40"/>
+  <path class="dim" d="M91 102l4 6 4-6" fill="none"/>
+  <text class="small accent" x="104" y="92">token</text>
+
+  <!-- The four hops -->
+  <rect class="box" x="20" y="130" width="150" height="44" rx="4"/>
+  <text x="95" y="157" text-anchor="middle">User</text>
+
+  <rect class="box" x="220" y="130" width="150" height="44" rx="4"/>
+  <text x="295" y="157" text-anchor="middle">Agent</text>
+
+  <rect class="box" x="420" y="130" width="150" height="44" rx="4"/>
+  <text x="495" y="157" text-anchor="middle">Gateway</text>
+
+  <rect class="box" x="620" y="130" width="160" height="44" rx="4"/>
+  <text x="700" y="157" text-anchor="middle">SAP application</text>
+
+  <!-- The identity, carried across every hop -->
+  <path class="flow" d="M170 152h50M370 152h50M570 152h50"/>
+  <path class="flow" d="M212 147l8 5-8 5M412 147l8 5-8 5M612 147l8 5-8 5"/>
+  <circle cx="170" cy="152" r="3.5" fill="#e07a6a"/>
+  <circle cx="370" cy="152" r="3.5" fill="#e07a6a"/>
+  <circle cx="570" cy="152" r="3.5" fill="#e07a6a"/>
+  <text class="small accent" x="400" y="118" text-anchor="middle">the user's identity, unchanged at every hop</text>
+
+  <!-- What each hop does -->
+  <text class="small" x="95" y="200" text-anchor="middle">signs in, receives the token</text>
+  <text class="small" x="295" y="200" text-anchor="middle">carries the token forward</text>
+  <text class="small" x="295" y="218" text-anchor="middle">holds no SAP credentials</text>
+  <text class="small" x="495" y="200" text-anchor="middle">exchanges the token</text>
+  <text class="small" x="495" y="218" text-anchor="middle">owns the connection into SAP</text>
+  <text class="small" x="700" y="200" text-anchor="middle">sees a call from the user</text>
+  <text class="small" x="700" y="218" text-anchor="middle">authorizes as the user</text>
+
+  <text class="small" x="400" y="272" text-anchor="middle">The agent is in the chain. It is never in charge of it.</text>
+</svg>

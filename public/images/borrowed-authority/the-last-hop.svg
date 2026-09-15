@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="800" height="300" role="img" aria-label="From the gateway through Cloud Connector into an on-premise SAP system: with principal propagation the call reaches the real user; without it the system silently falls back to a technical user.">
+  <style>
+    text { font-family: Inter, "Segoe UI", system-ui, sans-serif; font-size: 15px; fill: #d6d9de; }
+    .small { font-size: 12.5px; fill: #787f89; }
+    .accent { fill: #e07a6a; }
+    .box { fill: none; stroke: #787f89; stroke-width: 1.25; }
+    .flow { fill: none; stroke: #e07a6a; stroke-width: 2; }
+    .dim { fill: none; stroke: #787f89; stroke-width: 1.5; stroke-dasharray: 5 5; }
+  </style>
+  <rect width="800" height="300" rx="6" fill="#0b0f14"/>
+
+  <rect class="box" x="20" y="118" width="130" height="44" rx="4"/>
+  <text x="85" y="145" text-anchor="middle">Gateway</text>
+
+  <path class="flow" d="M150 140h60"/>
+  <path class="flow" d="M202 135l8 5-8 5"/>
+
+  <rect class="box" x="210" y="118" width="160" height="44" rx="4"/>
+  <text x="290" y="145" text-anchor="middle">Cloud Connector</text>
+  <text class="small" x="290" y="184" text-anchor="middle">the destination decides</text>
+
+  <!-- Two ways the last hop can go -->
+  <path class="flow" d="M370 140c60 0 60-60 120-60h120"/>
+  <path class="flow" d="M602 75l8 5-8 5"/>
+  <path class="dim" d="M370 140c60 0 60 60 120 60h120"/>
+  <path class="dim" d="M602 195l8 5-8 5" stroke-dasharray="none"/>
+
+  <rect class="box" x="620" y="40" width="160" height="80" rx="4"/>
+  <text x="700" y="66" text-anchor="middle">On-premise SAP</text>
+  <text class="small accent" x="700" y="88" text-anchor="middle">principal propagation</text>
+  <text class="small" x="700" y="106" text-anchor="middle">arrives as the real user</text>
+
+  <rect class="box" x="620" y="160" width="160" height="80" rx="4"/>
+  <text x="700" y="186" text-anchor="middle">On-premise SAP</text>
+  <text class="small" x="700" y="208" text-anchor="middle">not configured</text>
+  <text class="small" x="700" y="226" text-anchor="middle">falls back to a technical user</text>
+
+  <text class="small" x="490" y="66" text-anchor="middle">the identity survives</text>
+  <text class="small" x="490" y="232" text-anchor="middle">no error, every test passes</text>
+
+  <text class="small" x="400" y="278" text-anchor="middle">The only reliable test is a negative one: prompt as a user who should be denied.</text>
+</svg>
