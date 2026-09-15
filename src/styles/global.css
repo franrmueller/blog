@@ -590,3 +590,70 @@ img {
     -webkit-line-clamp: 3;
   }
 }
+
+/* ---------- Inline diagrams (src/components/Diagram.astro) ---------- */
+
+.prose .diagram {
+  margin: 2em 0;
+}
+
+.diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.diagram text {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  fill: var(--text);
+}
+
+.diagram .small {
+  font-size: 12.5px;
+  fill: var(--muted);
+}
+
+.diagram .label {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.diagram .accent,
+.diagram .dot {
+  fill: var(--accent);
+}
+
+.diagram .box {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.25;
+}
+
+.diagram .flow {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.diagram .dim {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+
+.diagram .dimwide {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 4;
+}
+
+.diagram .dash {
+  stroke-dasharray: 5 5;
+}
+
+.diagram .rule {
+  stroke: var(--muted);
+  stroke-width: 0.75;
+  stroke-opacity: 0.5;
+}

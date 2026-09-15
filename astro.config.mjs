@@ -1,10 +1,11 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
+import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://franrmueller.dev',
-  integrations: [sitemap()],
+  integrations: [mdx(), sitemap()],
   build: {
     // The stylesheet is small; inlining it removes a render-blocking request.
     inlineStylesheets: 'always',

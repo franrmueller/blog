@@ -1,0 +1,27 @@
+---
+/**
+ * Inlines an SVG from src/diagrams/ so it can use the page's colour tokens
+ * and follow the theme toggle. Usage in an .mdx post:
+ *   import Diagram from '../../components/Diagram.astro';
+ *   <Diagram name="identity-chain" />
+ */
+interface Props {
+  /** File name in src/diagrams/, without the .svg extension. */
+  name: string;
+}
+
+const { name } = Astro.props;
+
+const diagrams = import.meta.glob('../diagrams/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+}) as Record<string, string>;
+
+const svg = diagrams[`../diagrams/${name}.svg`];
+if (!svg) {
+  throw new Error(`Diagram "${name}" not found. Expected src/diagrams/${name}.svg`);
+}
+---
+
+<figure class="diagram" set:html={svg} />

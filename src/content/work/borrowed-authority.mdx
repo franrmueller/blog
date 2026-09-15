@@ -5,6 +5,8 @@ cover: spiral-path.webp
 description: "An AI agent inside SAP has an identity, but no permissions of its own. It carries whoever is asking. Three pictures of what that means."
 ---
 
+import Diagram from '../../components/Diagram.astro';
+
 *The first question anyone asks about an AI agent in SAP is what it is allowed to do. It is the wrong question. The agent is not allowed to do anything. The person prompting it is.*
 
 In April, SAP's revised API policy sent the whole ecosystem reading fine print. Since then the interpretation has softened, mostly through FAQ updates shaped by the user groups: existing integrations are untouched, customer-built APIs are fine, customer-run MCP servers are permitted under conditions. What survived every revision is simpler than the policy. An agent reaching SAP goes through a governed crossing, and every governed crossing is, underneath, an identity assertion travelling across a trust boundary.
@@ -13,7 +15,7 @@ That sentence is the whole article. The rest is three pictures of it.
 
 ## The chain
 
-![The user's identity travels from the user, through the agent and the gateway, into the SAP application.](/images/borrowed-authority/identity-chain.svg)
+<Diagram name="identity-chain" />
 
 Follow the line. The user signs in at the identity provider and receives a token. The agent carries that token forward; it holds no SAP credentials of its own, at any point. The gateway exchanges the token and owns the connection into SAP. What arrives at the SAP application is a call from the user. The agent was in the chain. It was never in charge of it.
 
@@ -21,7 +23,7 @@ The agent does have an identity. In SAP Cloud Identity Services it lives in the 
 
 ## One agent, many authorities
 
-![With principal propagation, three users pass through one agent and reach SAP with three different authorizations. With a service account, they collapse into one technical user.](/images/borrowed-authority/one-agent-many-authorities.svg)
+<Diagram name="one-agent-many-authorities" />
 
 Because the authority is borrowed, one agent behaves like many. Prompted by an accounts-payable clerk, it can post an invoice within that clerk's limits and nothing more. Prompted by a controller, it can release a blocked one. Prompted by someone with no finance role, it sees nothing. Nobody assigned roles to the agent for any of this. The roles did not move to the agent; the agent moved to the roles, one request at a time.
 
@@ -31,7 +33,7 @@ The lower half of the picture is the tempting alternative. Give the agent a tech
 
 ## The last hop
 
-![From the gateway through Cloud Connector into an on-premise SAP system: with principal propagation the call reaches the real user; without it the system silently falls back to a technical user.](/images/borrowed-authority/the-last-hop.svg)
+<Diagram name="the-last-hop" />
 
 Identity is the strongest property in the design and the easiest to lose, because it is lost quietly.
 

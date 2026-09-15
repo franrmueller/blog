@@ -13,7 +13,7 @@ npm run preview  # serves dist/
 
 ## Writing a post
 
-Add a Markdown file to `src/content/work/` or `src/content/mind/`. The file name becomes the URL slug.
+Add a Markdown file to `src/content/work/` or `src/content/mind/`. The file name becomes the URL slug. Use `.mdx` when a post needs an inline diagram: put the SVG in `src/diagrams/` and write `<Diagram name="file-name" />` where it should appear (see the Borrowed authority post).
 
 ```md
 ---
