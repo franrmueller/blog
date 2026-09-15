@@ -1,0 +1,24 @@
+---
+/**
+ * The sun/moon button. One icon: a sun in the light theme that becomes a
+ * moon in the dark one (see --sun in global.css). The page script wires
+ * every [data-toggle-theme] button on the page.
+ */
+interface Props {
+  /** Unique per instance on a page; the SVG mask needs its own id. */
+  maskId?: string;
+}
+
+const { maskId = 'sun-moon-mask' } = Astro.props;
+---
+
+<button class="theme-toggle" type="button" data-toggle-theme aria-label="Switch theme">
+  <svg class="sun-moon" viewBox="0 0 24 24" aria-hidden="true">
+    <mask id={maskId}>
+      <rect width="24" height="24" fill="#fff" />
+      <circle class="hole" cx="22" cy="2" r="6" fill="#000" />
+    </mask>
+    <circle cx="12" cy="12" r="6" fill="currentColor" mask={`url(#${maskId})`} />
+    <path class="rays" d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M4.6 19.4l1.4-1.4M18 6l1.4-1.4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+  </svg>
+</button>

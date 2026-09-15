@@ -74,6 +74,15 @@
     transition: --sun 300ms ease;
   }
 
+  /* The corner mark fades in; the header row unfolds out of it. */
+  .corner {
+    transition: opacity 150ms ease, visibility 150ms;
+  }
+
+  .corner-row {
+    transition: opacity 200ms ease, transform 200ms ease, visibility 200ms;
+  }
+
   /* A home strip is much wider than it is tall, the post header is 3:1.
      Let both snapshots fill the morphing box instead of stretching. */
   .cover,
@@ -656,4 +665,86 @@ img {
   stroke: var(--muted);
   stroke-width: 0.75;
   stroke-opacity: 0.5;
+}
+
+/* ---------- Corner menu ---------- */
+
+/* Fixed top-right once the header has scrolled away. Page-coloured pill so
+   it stays legible over text without a border or a shadow. */
+.corner {
+  position: fixed;
+  top: 0.9rem;
+  right: 1rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.4rem 0.5rem 0.4rem 1rem;
+  border-radius: 999px;
+  background: var(--bg);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.corner.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.corner-mark {
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.corner-mark svg {
+  display: block;
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.corner-mark:hover,
+.corner.is-open .corner-mark {
+  color: var(--accent);
+}
+
+/* The header row, folded into the mark until it is opened. */
+.corner-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(0.75rem);
+}
+
+.corner.is-open .corner-row {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.corner-row a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.corner-row a[aria-current],
+.corner-row a:hover {
+  color: var(--accent);
+}
+
+.corner-home {
+  display: inline-flex;
+}
+
+.corner-home svg {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
 }
