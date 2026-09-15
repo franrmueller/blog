@@ -16,7 +16,7 @@ const firstPost = columns.flatMap((column) => column.posts)[0];
 const preloadImage = firstPost ? coverUrl(firstPost.data.cover) : undefined;
 ---
 
-<Base wide preloadImage={preloadImage}>
+<Base wide preloadImage={preloadImage} preloadSerifItalic>
   <div class="column column-wide">
     <h1 class="sr-only">{SITE.name}</h1>
     <p class="home-about">Earth is a pocket of complexity that stayed stable long enough for ever more complex systems to give rise to human civilization. The universe has granted me a short run to fight entropy, at what may be the most interesting moment to have one.</p>

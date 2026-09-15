@@ -473,12 +473,13 @@ img {
   --measure: 60rem;
 }
 
-/* A few lines about Fran, above the two columns. */
+/* A few lines about Fran, above the two columns: set like a quote, in the
+   title face, italic, across the full width of the column. */
 .home-about {
-  font-family: var(--font-body);
-  font-size: 1.2rem;
-  line-height: 1.6;
-  max-width: 34em;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.6rem;
+  line-height: 1.35;
   margin: 1.5rem 0 2.5rem;
 }
 
@@ -568,6 +569,10 @@ img {
 
 /* The two columns and the vertical line stay side by side at every width. */
 @media (max-width: 40em) {
+  .home-about {
+    font-size: 1.4rem;
+  }
+
   .home {
     column-gap: 1.25rem;
   }
