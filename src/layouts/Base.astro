@@ -43,6 +43,12 @@ const current = (key: string) => {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      try {
+        const t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch {}
+    </script>
     {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
@@ -71,9 +77,24 @@ const current = (key: string) => {
           <path d="M10 21v-6h4v6" />
         </svg>
       </a>
-      <nav class="site-nav" aria-label="Sections">
-        {nav.map((item) => <a href={item.href} aria-current={current(item.key)}>{item.label}</a>)}
-      </nav>
+      <div class="site-right">
+        <nav class="site-nav" aria-label="Sections">
+          {nav.map((item) => <a href={item.href} aria-current={current(item.key)}>{item.label}</a>)}
+        </nav>
+        <div class="theme" role="group" aria-label="Theme">
+          <button class="theme-light" type="button" data-set-theme="light" aria-label="Light theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+            </svg>
+          </button>
+          <button class="theme-dark" type="button" data-set-theme="dark" aria-label="Dark theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
     </header>
     <main>
       <slot />
@@ -81,5 +102,31 @@ const current = (key: string) => {
     <footer class={`site-footer ${column}`}>
       <p>{SITE.shortName}</p>
     </footer>
+    <script is:inline>
+      // The one piece of JavaScript on the site: the theme toggle.
+      // Without it the site simply follows the system preference.
+      (() => {
+        const root = document.documentElement;
+        const buttons = document.querySelectorAll('[data-set-theme]');
+        const sync = () => {
+          const theme =
+            root.dataset.theme || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+          for (const b of buttons) b.setAttribute('aria-pressed', String(b.dataset.setTheme === theme));
+          for (const m of document.querySelectorAll('meta[name="theme-color"]')) {
+            m.content = theme === 'light' ? '#f5f2ec' : '#0b0f14';
+          }
+        };
+        for (const b of buttons) {
+          b.addEventListener('click', () => {
+            root.dataset.theme = b.dataset.setTheme;
+            try {
+              localStorage.setItem('theme', b.dataset.setTheme);
+            } catch {}
+            sync();
+          });
+        }
+        sync();
+      })();
+    </script>
   </body>
 </html>

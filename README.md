@@ -1,6 +1,6 @@
 # Blog
 
-Personal blog of Francisco Rodriguez Müller. Astro, static output, no client-side JavaScript. See [BRIEF.md](BRIEF.md) for the design brief.
+Personal blog of Francisco Rodriguez Müller. Astro, static output. The only client-side JavaScript is a few lines for the sun/moon theme toggle; without it the site follows the system colour scheme. See [BRIEF.md](BRIEF.md) for the design brief.
 
 ## Commands
 
