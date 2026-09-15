@@ -20,3 +20,6 @@ export const SECTIONS = {
 export type Section = keyof typeof SECTIONS;
 
 export const SECTION_KEYS = Object.keys(SECTIONS) as Section[];
+
+/** Flip to true to publish /library/ and show the book icon in the header. */
+export const LIBRARY_PUBLIC = false;

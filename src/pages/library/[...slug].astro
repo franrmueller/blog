@@ -1,0 +1,34 @@
+---
+import Base from '../../layouts/Base.astro';
+import { LIBRARY_PUBLIC } from '../../site';
+import { books } from '../../data/library';
+
+// A rest route with one path, /library/, so that while the library is not
+// public the page is not built at all and stays out of the sitemap.
+export function getStaticPaths() {
+  return LIBRARY_PUBLIC ? [{ params: { slug: undefined } }] : [];
+}
+
+const title = 'Library';
+const description = 'Books I have read.';
+---
+
+<Base title={title} description={description}>
+  <div class="column">
+    <h1 class="sr-only">{title}</h1>
+    {
+      books.length === 0 ? (
+        <p class="posts-empty">Nothing here yet.</p>
+      ) : (
+        <ul class="books">
+          {books.map((book) => (
+            <li>
+              <span class="book-title">{book.title}</span>
+              <span class="book-author">{book.author}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</Base>

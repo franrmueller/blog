@@ -1,0 +1,20 @@
+---
+/**
+ * The open-book link to the library. Shows the icon alone; the word
+ * "Library" unfolds beside it on hover and keyboard focus, and stays
+ * unfolded on the library page itself.
+ */
+interface Props {
+  current?: 'page' | 'true';
+}
+
+const { current } = Astro.props;
+---
+
+<a class="library-link" href="/library/" aria-current={current}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 7c-1.6-1.4-3.8-2-6.5-2H3v13h2.5c2.7 0 4.9.6 6.5 2 1.6-1.4 3.8-2 6.5-2H21V5h-2.5c-2.7 0-4.9.6-6.5 2Z" />
+    <path d="M12 7v13" />
+  </svg>
+  <span class="library-label">Library</span>
+</a>

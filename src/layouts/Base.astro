@@ -1,8 +1,9 @@
 ---
 import { Font } from 'astro:assets';
 import '../styles/global.css';
-import { SITE } from '../site';
+import { SITE, LIBRARY_PUBLIC } from '../site';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import LibraryLink from '../components/LibraryLink.astro';
 import sunflowerSvg from '../../public/favicon.svg?raw';
 
 // The favicon, recoloured so it can sit muted and turn coral like the nav.
@@ -100,6 +101,7 @@ const current = (key: string) => {
       <div class="site-right">
         <nav class="site-nav" aria-label="Sections">
           {nav.map((item) => <a href={item.href} aria-current={current(item.key)}>{item.label}</a>)}
+          {LIBRARY_PUBLIC && <LibraryLink current={current('library')} />}
         </nav>
         <ThemeToggle />
       </div>
@@ -116,6 +118,7 @@ const current = (key: string) => {
           </svg>
         </a>
         {nav.map((item) => <a href={item.href} aria-current={current(item.key)}>{item.label}</a>)}
+        {LIBRARY_PUBLIC && <LibraryLink current={current('library')} />}
         <ThemeToggle maskId="sun-moon-mask-corner" />
       </nav>
       <button class="corner-mark" type="button" aria-expanded="false" aria-controls="corner-menu" aria-label="Menu" set:html={sunflower} />

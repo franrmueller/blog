@@ -69,6 +69,11 @@
     transition: color 150ms ease;
   }
 
+  /* The word "Library" unfolds beside the book. */
+  .library-label {
+    transition: max-width 200ms ease, opacity 150ms ease, margin-left 200ms ease;
+  }
+
   /* The sun becomes the moon in place. */
   .sun-moon {
     transition: --sun 300ms ease;
@@ -257,6 +262,37 @@ img {
   color: var(--accent);
 }
 
+/* The library link: an open book that says its name on hover or focus,
+   and keeps saying it on the library page. Used in the header and the
+   corner row alike. */
+.library-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.library-link svg {
+  display: block;
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.library-label {
+  max-width: 0;
+  margin-left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.library-link:hover .library-label,
+.library-link:focus-visible .library-label,
+.library-link[aria-current] .library-label {
+  max-width: 6ch;
+  margin-left: 0.4rem;
+  opacity: 1;
+}
+
 .site-footer {
   padding-block: 4rem 2rem;
   color: var(--muted);
@@ -322,6 +358,35 @@ img {
 .posts-empty {
   color: var(--muted);
   padding-block: 1rem;
+}
+
+/* ---------- Library ---------- */
+
+.books {
+  list-style: none;
+  margin: 0;
+  padding: 1rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.books li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.book-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.book-author {
+  font-size: 0.85rem;
+  color: var(--muted);
 }
 
 /* ---------- Single post ---------- */
