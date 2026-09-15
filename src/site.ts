@@ -1,7 +1,10 @@
 export const SITE = {
-  name: 'Francisco Rodriguez Müller',
+  name: "Fran's blog",
   /** Shown in the footer. */
   shortName: 'Fran Müller',
+  /** Shown in the footer beside the name, in italic. */
+  tagline:
+    'some of my conversations with Claude, synthesized into blog posts documenting my learning journey',
   description: 'Notes on enterprise technology, and on the mind.',
 } as const;
 

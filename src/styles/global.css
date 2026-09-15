@@ -296,6 +296,17 @@ img {
 .site-footer {
   padding-block: 4rem 2rem;
   color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 1.25rem;
+}
+
+.site-footer .site-tagline {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  max-width: 40ch;
 }
 
 .site-footer p {
