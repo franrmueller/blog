@@ -4,8 +4,8 @@ export const SITE = {
   shortName: 'Fran Müller',
   /** Shown in the footer beside the name, in italic. */
   tagline:
-    'some of my conversations with Claude, synthesized into blog posts documenting my learning journey',
-  description: 'Notes on enterprise technology, and on the mind.',
+    'Some of my conversations with Claude, synthesized into blog posts documenting my learning journey.',
+  description: 'Some of my conversations with Claude, synthesized into blog posts documenting my learning journey.',
 } as const;
 
 export const SECTIONS = {
