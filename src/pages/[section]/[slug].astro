@@ -22,9 +22,18 @@ const { post } = Astro.props;
 const section = post.collection;
 const cover = coverUrl(post.data.cover);
 const { Content } = await render(post);
+const shareImage = `/${section}/${post.id}/share.jpg`;
 ---
 
-<Base title={post.data.title} description={post.data.description} image={cover} type="article" preloadImage={cover} preloadBody>
+<Base
+  title={post.data.title}
+  description={post.data.description}
+  image={shareImage}
+  type="article"
+  publishedTime={isoDate(post.data.date)}
+  preloadImage={cover}
+  preloadBody
+>
   <article>
     <img
       class="cover"

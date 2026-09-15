@@ -4,6 +4,7 @@ import '../styles/global.css';
 import { SITE, LIBRARY_PUBLIC } from '../site';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import LibraryLink from '../components/LibraryLink.astro';
+import { SHARE_WIDTH, SHARE_HEIGHT } from '../lib/share-image';
 import sunflowerSvg from '../../public/favicon.svg?raw';
 
 // The favicon, recoloured so it can sit muted and turn coral like the nav.
@@ -12,9 +13,11 @@ const sunflower = sunflowerSvg.replace('fill="#e07a6a"', 'fill="currentColor"');
 interface Props {
   title?: string;
   description?: string;
-  /** Root-relative or absolute URL of the page's cover, for link previews. */
+  /** Root-relative or absolute URL of the 1200×630 JPEG share image, for link previews. */
   image?: string;
   type?: 'website' | 'article';
+  /** Article pages pass their ISO date; emitted as article:published_time. */
+  publishedTime?: string;
   /** Home uses the wider column; header and footer follow it. */
   wide?: boolean;
   /** The largest image above the fold, requested before the fonts. */
@@ -30,6 +33,7 @@ const {
   description = SITE.description,
   image,
   type = 'website',
+  publishedTime,
   wide = false,
   preloadImage,
   preloadBody = false,
@@ -79,11 +83,16 @@ const current = (key: string) => {
     <meta name="color-scheme" content="dark light" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0f14" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f2ec" />
+    <meta property="og:site_name" content={SITE.name} />
     <meta property="og:type" content={type} />
     <meta property="og:title" content={title ?? SITE.name} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && <meta property="og:image:width" content={String(SHARE_WIDTH)} />}
+    {ogImage && <meta property="og:image:height" content={String(SHARE_HEIGHT)} />}
+    {ogImage && <meta property="og:image:type" content="image/jpeg" />}
+    {type === 'article' && publishedTime && <meta property="article:published_time" content={publishedTime} />}
     <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
     <Font cssVariable="--font-serif" preload={serifPreload} />
     <Font cssVariable="--font-sans" preload={[{ style: 'normal' }]} />

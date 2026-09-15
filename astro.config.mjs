@@ -6,6 +6,10 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://franrmueller.dev',
   integrations: [mdx(), sitemap()],
+  vite: {
+    // Native and wasm renderers for the share images; bundling them stalls the build.
+    ssr: { external: ['sharp', 'satori', '@resvg/resvg-js', 'wawoff2'] },
+  },
   build: {
     // The stylesheet is small; inlining it removes a render-blocking request.
     inlineStylesheets: 'always',
