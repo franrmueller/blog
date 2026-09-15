@@ -5,7 +5,7 @@ cover: spiral-path.webp
 description: "An AI agent inside SAP has an identity, but no permissions of its own. It carries whoever is asking. Three pictures of what that means."
 ---
 
-The first question anyone asks about an AI agent in SAP is what it is allowed to do. It is the wrong question. The agent is not allowed to do anything. The person prompting it is.
+*The first question anyone asks about an AI agent in SAP is what it is allowed to do. It is the wrong question. The agent is not allowed to do anything. The person prompting it is.*
 
 In April, SAP's revised API policy sent the whole ecosystem reading fine print. Since then the interpretation has softened, mostly through FAQ updates shaped by the user groups: existing integrations are untouched, customer-built APIs are fine, customer-run MCP servers are permitted under conditions. What survived every revision is simpler than the policy. An agent reaching SAP goes through a governed crossing, and every governed crossing is, underneath, an identity assertion travelling across a trust boundary.
 

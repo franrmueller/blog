@@ -130,6 +130,17 @@ const current = (key: string) => {
             m.content = theme === 'light' ? '#f5f2ec' : '#0b0f14';
           }
         };
+        // Read the stored choice again: after a back/forward cache restore
+        // (the startup script does not run then) and when another tab changes it.
+        const apply = () => {
+          let stored = null;
+          try {
+            stored = localStorage.getItem('theme');
+          } catch {}
+          if (stored === 'light' || stored === 'dark') root.dataset.theme = stored;
+          else delete root.dataset.theme;
+          sync();
+        };
         button.addEventListener('click', () => {
           const next = current() === 'light' ? 'dark' : 'light';
           root.dataset.theme = next;
@@ -137,6 +148,12 @@ const current = (key: string) => {
             localStorage.setItem('theme', next);
           } catch {}
           sync();
+        });
+        addEventListener('pageshow', (event) => {
+          if (event.persisted) apply();
+        });
+        addEventListener('storage', (event) => {
+          if (event.key === 'theme') apply();
         });
         sync();
       })();

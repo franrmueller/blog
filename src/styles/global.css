@@ -478,8 +478,8 @@ img {
 .home-about {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 1.6rem;
-  line-height: 1.35;
+  font-size: 1.35rem;
+  line-height: 1.4;
   margin: 1.5rem 0 2.5rem;
 }
 
@@ -570,7 +570,7 @@ img {
 /* The two columns and the vertical line stay side by side at every width. */
 @media (max-width: 40em) {
   .home-about {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
 
   .home {
