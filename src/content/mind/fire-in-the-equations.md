@@ -47,6 +47,8 @@ And what comes out isn't a God who knows my name. It's a single subject, prior t
 
 What follows isn't proof either. Scripture is big, the mind is built to see faces in clouds, and finding patterns across distant things is exactly the pleasure I'm most prone to. But when traditions that never touched keep landing on the same shape of answer, the shape is worth taking seriously.
 
+---
+
 ## The fire in the equations
 
 If this is true, and the field of consciousness is what collapses the wave function, then a lot of what religions have been saying for thousands of years stops sounding like metaphor and starts sounding like a description.
