@@ -12,6 +12,11 @@ export const SITE = {
     text:
       "I use Claude as a learning companion for research, structuring ideas, and polishing wording. None of the ideas here are original to me; I'm a student of people far smarter than I am. What I can promise is that I don't publish anything I don't fully understand.",
   },
+  /** The footer name's pop-up: the author's profiles, in the order shown. */
+  social: {
+    linkedin: 'https://www.linkedin.com/in/franrmueller/',
+    instagram: 'https://www.instagram.com/franrmuller/',
+  },
 } as const;
 
 export const SECTIONS = {

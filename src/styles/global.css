@@ -85,7 +85,7 @@
   }
 
   .corner-row,
-  .disclaimer-note {
+  .popover-note {
     transition: opacity 200ms ease, transform 200ms ease, visibility 200ms;
   }
 
@@ -322,16 +322,20 @@ img {
   text-underline-offset: 0.2em;
 }
 
-/* The AI disclaimer: a small-print button at the far right of the footer,
-   and the note it unfolds. The note follows the corner menu: the page colour,
-   rounded, and it fades in with a short slide. Over the plain footer a
-   hairline keeps it from merging with the page. */
-.disclaimer {
+/* The footer's notes: the name at the left and the AI disclaimer at the far
+   right are small-print buttons, each unfolding a note above itself. The
+   note follows the corner menu: the page colour, rounded, and it fades in
+   with a short slide. Over the plain footer a hairline keeps it from
+   merging with the page. */
+.popover {
   position: relative;
+}
+
+.disclaimer {
   margin-left: auto;
 }
 
-.disclaimer-button {
+.popover-button {
   padding: 0;
   border: 0;
   background: none;
@@ -341,15 +345,15 @@ img {
   cursor: pointer;
 }
 
-.disclaimer-button:hover,
-.disclaimer.is-open .disclaimer-button {
+.popover-button:hover,
+.popover.is-open .popover-button {
   color: var(--accent);
 }
 
-.disclaimer-note {
+.popover-note {
   position: absolute;
   bottom: calc(100% + 0.6rem);
-  right: 0;
+  left: 0;
   z-index: 5;
   width: max-content;
   max-width: min(24rem, 100vw - 2 * var(--gutter));
@@ -367,10 +371,45 @@ img {
   transform: translateY(0.5rem);
 }
 
-.disclaimer.is-open .disclaimer-note {
+/* The disclaimer sits at the right edge, so its note hangs from the right. */
+.disclaimer .popover-note {
+  left: auto;
+  right: 0;
+}
+
+.popover.is-open .popover-note {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+}
+
+/* The name's note: the author's profiles as a row of icons, drawn like the
+   rest of the chrome and muted until hovered. */
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  list-style: none;
+}
+
+.social-links li {
+  display: flex;
+}
+
+.social-links a {
+  display: inline-flex;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.social-links a:hover {
+  color: var(--accent);
+}
+
+.social-links svg {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 /* ---------- Covers ---------- */
