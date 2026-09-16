@@ -9,13 +9,16 @@ export function getStaticPaths() {
 }
 
 const section = Astro.params.section as Section;
-const { title, description } = SECTIONS[section];
+const entry = SECTIONS[section];
+const { title, description } = entry;
+const about = 'about' in entry ? entry.about : undefined;
 const posts = await getPosts(section);
 ---
 
 <Base title={title} description={description}>
   <div class="column">
     <h1 class="sr-only">{title}</h1>
+    {about && <p class="section-about">{about}</p>}
     <PostList posts={posts} />
   </div>
 </Base>

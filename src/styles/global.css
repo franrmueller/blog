@@ -569,6 +569,14 @@ img {
   margin: 1.5rem 0 2.5rem;
 }
 
+.section-about {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  margin: 1.5rem 0 2rem;
+}
+
 .home {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);

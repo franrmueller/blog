@@ -17,6 +17,9 @@ export const SECTIONS = {
     title: 'Mind',
     description:
       'Posts on philosophy, neuroscience, psychology, consciousness, physics and religion.',
+    /** Shown above the post list on the section page. */
+    about:
+      'Earth is a pocket of complexity that stayed stable long enough for ever more complex systems to give rise to human civilization. The universe has granted me a short run to fight entropy, at what may be the most interesting moment to have one.',
   },
 } as const;
 

@@ -20,6 +20,8 @@ interface Props {
   publishedTime?: string;
   /** Home uses the wider column; header and footer follow it. */
   wide?: boolean;
+  /** Home shows the tagline in its about line, so the footer drops it. */
+  hideTagline?: boolean;
   /** The largest image above the fold, requested before the fonts. */
   preloadImage?: string;
   /** Pages with a prose body preload the body font. */
@@ -35,6 +37,7 @@ const {
   type = 'website',
   publishedTime,
   wide = false,
+  hideTagline = false,
   preloadImage,
   preloadBody = false,
   preloadSerifItalic = false,
@@ -137,7 +140,7 @@ const current = (key: string) => {
     </main>
     <footer class={`site-footer ${column}`}>
       <p>{SITE.shortName}</p>
-      <p class="site-tagline">{SITE.tagline}</p>
+      {!hideTagline && <p class="site-tagline">{SITE.tagline}</p>}
     </footer>
     <script is:inline>
       // The JavaScript on the site: the theme toggle and the corner menu.
