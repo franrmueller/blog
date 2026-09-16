@@ -6,6 +6,12 @@ export const SITE = {
   tagline:
     'Some of my conversations with Claude, synthesized into blog posts documenting my learning journey.',
   description: 'Some of my conversations with Claude, synthesized into blog posts documenting my learning journey.',
+  /** The footer's AI disclaimer: the button label and the note it opens. */
+  aiDisclaimer: {
+    label: 'AI Disclaimer',
+    text:
+      "I use Claude as a learning companion for research, structuring ideas, and polishing wording. None of the ideas here are original to me; I'm a student of people far smarter than I am. What I can promise is that I don't publish anything I don't fully understand.",
+  },
 } as const;
 
 export const SECTIONS = {

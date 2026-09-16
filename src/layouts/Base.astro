@@ -141,10 +141,15 @@ const current = (key: string) => {
     <footer class={`site-footer ${column}`}>
       <p>{SITE.shortName}</p>
       {!hideTagline && <p class="site-tagline">{SITE.tagline}</p>}
+      <!-- Sits at the far right; the note opens above it, like the corner menu unfolds beside its mark. -->
+      <div class="disclaimer">
+        <p class="disclaimer-note" id="ai-disclaimer">{SITE.aiDisclaimer.text}</p>
+        <button class="disclaimer-button" type="button" aria-expanded="false" aria-controls="ai-disclaimer">{SITE.aiDisclaimer.label}</button>
+      </div>
     </footer>
     <script is:inline>
-      // The JavaScript on the site: the theme toggle and the corner menu.
-      // Without it the site follows the system scheme and the header stays at the top.
+      // The JavaScript on the site: the theme toggle, the AI disclaimer and the corner menu.
+      // Without it the site follows the system scheme, the note stays folded and the header stays at the top.
       (() => {
         const root = document.documentElement;
 
@@ -189,6 +194,26 @@ const current = (key: string) => {
           if (event.key === 'theme') apply();
         });
         sync();
+
+        // AI disclaimer: the footer button unfolds the note above itself.
+        const disclaimer = document.querySelector('.disclaimer');
+        const disclaimerButton = disclaimer && disclaimer.querySelector('.disclaimer-button');
+        if (disclaimer && disclaimerButton) {
+          const setNoteOpen = (open) => {
+            disclaimer.classList.toggle('is-open', open);
+            disclaimerButton.setAttribute('aria-expanded', String(open));
+          };
+          disclaimerButton.addEventListener('click', () => setNoteOpen(!disclaimer.classList.contains('is-open')));
+          addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && disclaimer.classList.contains('is-open')) {
+              setNoteOpen(false);
+              disclaimerButton.focus();
+            }
+          });
+          addEventListener('click', (event) => {
+            if (!disclaimer.contains(event.target)) setNoteOpen(false);
+          });
+        }
 
         // Corner menu: the sunflower shows while the header is off screen.
         const corner = document.querySelector('.corner');

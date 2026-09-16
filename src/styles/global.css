@@ -84,7 +84,8 @@
     transition: opacity 150ms ease, visibility 150ms;
   }
 
-  .corner-row {
+  .corner-row,
+  .disclaimer-note {
     transition: opacity 200ms ease, transform 200ms ease, visibility 200ms;
   }
 
@@ -319,6 +320,57 @@ img {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
+}
+
+/* The AI disclaimer: a small-print button at the far right of the footer,
+   and the note it unfolds. The note follows the corner menu: the page colour,
+   rounded, and it fades in with a short slide. Over the plain footer a
+   hairline keeps it from merging with the page. */
+.disclaimer {
+  position: relative;
+  margin-left: auto;
+}
+
+.disclaimer-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.disclaimer-button:hover,
+.disclaimer.is-open .disclaimer-button {
+  color: var(--accent);
+}
+
+.disclaimer-note {
+  position: absolute;
+  bottom: calc(100% + 0.6rem);
+  right: 0;
+  z-index: 5;
+  width: max-content;
+  max-width: min(24rem, 100vw - 2 * var(--gutter));
+  margin: 0;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--muted) 35%, transparent);
+  border-radius: 1rem;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.5rem);
+}
+
+.disclaimer.is-open .disclaimer-note {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 /* ---------- Covers ---------- */
