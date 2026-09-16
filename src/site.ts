@@ -23,6 +23,8 @@ export const SECTIONS = {
   work: {
     title: 'Work',
     description: 'Posts on SAP, AI, cloud and enterprise technology.',
+    /** Shown above the post list on the section page. */
+    about: 'Here I document what I have been learning on SAP AI & Cloud Infrastructure.',
   },
   mind: {
     title: 'Mind',
