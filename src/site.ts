@@ -5,7 +5,7 @@ export const SITE = {
   /** Shown in the footer beside the name, in italic. */
   tagline:
     'Some of my conversations with Claude, synthesized into blog posts, documenting my learning journey.',
-  description: 'Some of my conversations with Claude, synthesized into blog posts documenting my learning journey.',
+  description: 'Some of my conversations with Claude, synthesized into blog posts, documenting my learning journey.',
   /** The footer's AI disclaimer: the button label and the note it opens. */
   aiDisclaimer: {
     label: 'AI Disclaimer',
