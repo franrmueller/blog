@@ -119,7 +119,8 @@ const current = (key: string) => {
       </div>
     </header>
 
-    <!-- Appears top-right once the header has scrolled away; click unfolds the header row. -->
+    <!-- Appears top-right once the header has scrolled away; click unfolds the header row.
+         On touch screens the mark can be dragged to either side or tucked off the edge (see the script). -->
     <div class="corner">
       <nav class="corner-row" id="corner-menu" aria-label="Sections">
         <a class="corner-home" href="/" aria-label="Home">
@@ -172,7 +173,8 @@ const current = (key: string) => {
       </div>
     </footer>
     <script is:inline>
-      // The JavaScript on the site: the theme toggle, the footer notes and the corner menu.
+      // The JavaScript on the site: the theme toggle, the footer notes and the corner menu
+      // (which, on touch screens, can be dragged about and tucked away).
       // Without it the site follows the system scheme, the notes stay folded and the header stays at the top.
       (() => {
         const root = document.documentElement;
@@ -253,22 +255,168 @@ const current = (key: string) => {
         const header = document.querySelector('.site-header');
         const mark = corner && corner.querySelector('.corner-mark');
         if (!corner || !header || !mark || !('IntersectionObserver' in window)) return;
+        // On touch screens the mark can be moved (below). `place` is where it
+        // was dropped, or null for the default top-right; when it is tucked
+        // into a corner, a tap on its tab shows it ("peeking") for as long as
+        // the row is open.
+        let place = null;
+        let peeking = false;
+        let drag = null;
+        let lastDrop = 0;
+        let applyPlace = () => {};
         const setOpen = (open) => {
           corner.classList.toggle('is-open', open);
           mark.setAttribute('aria-expanded', String(open));
+          if (!open && peeking) {
+            peeking = false;
+            applyPlace();
+          }
         };
         new IntersectionObserver(([entry]) => {
           const away = !entry.isIntersecting;
           corner.classList.toggle('is-visible', away);
           if (!away) setOpen(false);
         }).observe(header);
-        mark.addEventListener('click', () => setOpen(!corner.classList.contains('is-open')));
+        mark.addEventListener('click', () => {
+          if (performance.now() - lastDrop < 300) return; // the click that ends a drag
+          if (place && place.tucked && !peeking) {
+            peeking = true;
+            applyPlace();
+            setOpen(true);
+            return;
+          }
+          setOpen(!corner.classList.contains('is-open'));
+        });
         addEventListener('keydown', (event) => {
           if (event.key === 'Escape') setOpen(false);
         });
         addEventListener('click', (event) => {
           if (!corner.contains(event.target)) setOpen(false);
         });
+
+        // Touch screens: the mark can be dragged to any height on either side,
+        // or pushed off a side of the screen, where it tucks into the nearest
+        // corner and leaves a small tab on the edge. The spot is kept per device.
+        if (!matchMedia('(pointer: coarse)').matches || !('PointerEvent' in window)) return;
+        const rest = getComputedStyle(corner);
+        const EDGE_X = parseFloat(rest.right) || 20;
+        const EDGE_Y = parseFloat(rest.top) || 18;
+        const TUCK = 16; // a mark dropped with its centre this close to a side edge tucks away
+        const SETTLE = 260; // ms, a little over the glide in the stylesheet
+        const clamp = (value, low, high) => Math.min(Math.max(value, low), high);
+        const viewWidth = () => document.documentElement.clientWidth;
+        const offsetLimit = () => innerHeight - mark.offsetHeight - EDGE_Y;
+        const inTuckZone = (centreX) => centreX < TUCK || centreX > viewWidth() - TUCK;
+        // While moving, the mark is placed by left/top so the drop can glide;
+        // applyPlace then anchors it to its nearest edges, so it stays put
+        // when the browser bars change the height of the viewport.
+        const setBox = (left, top) => {
+          const s = corner.style;
+          s.left = `${left}px`;
+          s.top = `${top}px`;
+          s.right = 'auto';
+          s.bottom = 'auto';
+        };
+        const setClasses = () => {
+          corner.classList.toggle('is-left', place.side === 'left');
+          corner.classList.toggle('is-tucked', place.tucked && !peeking);
+        };
+        const insets = () => ({
+          x: place.tucked && !peeking ? 0 : EDGE_X,
+          y: place.tucked ? EDGE_Y : clamp(place.offset, EDGE_Y, offsetLimit()),
+        });
+        applyPlace = () => {
+          if (!place || drag) return;
+          setClasses();
+          const { x, y } = insets();
+          const s = corner.style;
+          s.left = place.side === 'left' ? `${x}px` : 'auto';
+          s.right = place.side === 'right' ? `${x}px` : 'auto';
+          s.top = place.anchor === 'top' ? `${y}px` : 'auto';
+          s.bottom = place.anchor === 'bottom' ? `${y}px` : 'auto';
+        };
+        let settleTimer;
+        const settle = () => {
+          setClasses();
+          const { x, y } = insets();
+          setBox(
+            place.side === 'left' ? x : viewWidth() - mark.offsetWidth - x,
+            place.anchor === 'top' ? y : innerHeight - mark.offsetHeight - y,
+          );
+          clearTimeout(settleTimer);
+          settleTimer = setTimeout(applyPlace, SETTLE);
+        };
+        try {
+          const stored = JSON.parse(localStorage.getItem('corner'));
+          if (
+            stored &&
+            (stored.side === 'left' || stored.side === 'right') &&
+            (stored.anchor === 'top' || stored.anchor === 'bottom')
+          ) {
+            place = {
+              side: stored.side,
+              anchor: stored.anchor,
+              offset: Number(stored.offset) || EDGE_Y,
+              tucked: Boolean(stored.tucked),
+            };
+            // Put it there without the glide: the page may load scrolled down.
+            corner.classList.add('is-dragging');
+            applyPlace();
+            void corner.offsetWidth;
+            corner.classList.remove('is-dragging');
+          }
+        } catch {}
+        addEventListener('resize', applyPlace);
+
+        mark.addEventListener('pointerdown', (event) => {
+          if (!event.isPrimary || drag) return;
+          const box = mark.getBoundingClientRect();
+          drag = { id: event.pointerId, x: event.clientX, y: event.clientY, left: box.left, top: box.top, moved: false };
+          mark.setPointerCapture(event.pointerId);
+        });
+        mark.addEventListener('pointermove', (event) => {
+          if (!drag || event.pointerId !== drag.id) return;
+          const dx = event.clientX - drag.x;
+          const dy = event.clientY - drag.y;
+          if (!drag.moved) {
+            if (Math.hypot(dx, dy) < 6) return; // still a tap; the click handler takes it
+            drag.moved = true;
+            peeking = false;
+            setOpen(false);
+            clearTimeout(settleTimer);
+            corner.classList.add('is-dragging');
+            corner.classList.remove('is-tucked');
+          }
+          const w = mark.offsetWidth;
+          const h = mark.offsetHeight;
+          const left = clamp(drag.left + dx, -w / 2, viewWidth() - w / 2);
+          const top = clamp(drag.top + dy, 0, innerHeight - h);
+          setBox(left, top);
+          corner.classList.toggle('is-tucking', inTuckZone(left + w / 2));
+        });
+        const drop = (event) => {
+          if (!drag || event.pointerId !== drag.id) return;
+          const { moved } = drag;
+          drag = null;
+          if (!moved) return;
+          lastDrop = performance.now();
+          corner.classList.remove('is-dragging', 'is-tucking');
+          const box = mark.getBoundingClientRect();
+          const centreX = box.left + box.width / 2;
+          const anchor = box.top + box.height / 2 < innerHeight / 2 ? 'top' : 'bottom';
+          place = {
+            side: centreX < viewWidth() / 2 ? 'left' : 'right',
+            anchor,
+            offset: clamp(anchor === 'top' ? box.top : innerHeight - box.bottom, EDGE_Y, offsetLimit()),
+            tucked: inTuckZone(centreX),
+          };
+          try {
+            localStorage.setItem('corner', JSON.stringify(place));
+          } catch {}
+          settle();
+        };
+        mark.addEventListener('pointerup', drop);
+        mark.addEventListener('pointercancel', drop);
       })();
     </script>
   </body>
