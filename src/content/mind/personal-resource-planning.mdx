@@ -1,0 +1,54 @@
+---
+title: "Personal Resource Planning"
+date: 2026-09-29
+cover: personal-resource-planning.webp
+description: "I make the case for an integrated system to companies for a living. My own life still runs on siloed apps and an overloaded head. This is the pitch, with me as the client."
+---
+
+import Diagram from '../../components/Diagram.astro';
+
+*For most of my life I've been drawn to self-development: how to think, sleep, train, eat, spend and use time well. Later, through work, I found SAP, and my job became helping companies put their whole operation into one system. I've made the case for that system in enough rooms to know it by heart. It only recently occurred to me that I'd never made it to the one client who needed it most.*
+
+## The pitch companies get
+
+It starts the same way every time. You don't have a software problem. You have an integration problem. Sales has a system, the warehouse has a system, finance has a system, and each one is fine. What's missing is that nothing connects them. So every question that crosses a boundary gets answered by a person with a spreadsheet, days later, and slightly wrong. The same fact gets typed three times. Month-end is two weeks of reconciliation. Decisions get made on last month's numbers because this month's aren't ready.
+
+An ERP replaces all of that with one principle: a business event is recorded once, and it's immediately true everywhere it matters. A delivery arrives, and stock, the ledger and the open order change in the same moment, with nobody re-entering anything. Everything people admire about these systems, the single version of the truth, the fast close, the automation, comes from that one principle.
+
+## The current system
+
+Now the client is me.
+
+I already run a resource planning system. It's installed in the wrong place. My habits, plans, budget, meal rules, training schedule, and the list of things I've promised myself live in my head. My head is the S/4HANA. It's the database. It's the interface between the watch, the calendar and the bank. It's the scheduler that decides what runs today, and the alert system that fires "you forgot" at two in the morning. And it runs on biological RAM: no persistence, no backup, a working memory that holds a handful of items at once, and a full rebuild every morning.
+
+The operating costs are real, I just never saw them as costs. Every open commitment is a background process. It runs whether I'm using it or not, and it draws on the same energy that thinking, working and being present with people need. The symptoms are the low hum of things not done, the fog on days when too much is in memory, the decisions made badly because the data was in my head and my head was tired. When the server goes down, when I'm sick or exhausted or just had a bad week, the whole company stops, because nothing runs without me. And nothing is documented. When a routine slips, the data isn't archived. It's gone.
+
+The cruelest part is the architecture. The processor that should be running my life is running my bookkeeping. It's the CEO doing the invoices, and the invoices are winning.
+
+## The previous migration attempts
+
+I've tried to move parts of this out of my head before. A to-do app. A calendar. A planner. A habit tracker, then a better habit tracker, then a spreadsheet with a dashboard on top of it. Each one worked for a while, and each one failed the same way.
+
+None of them fed the others, so every app was a data-entry job. The calendar didn't know what the tracker knew. The budget didn't know what the planner knew. The integration between them still ran on me, which means adding an app didn't remove load from my head, it added an interface to it. Five apps, five interfaces, all maintained by the same overloaded server.
+
+Then the pattern everyone knows. I'd miss a few entries. The data would go stale. Stale data can't be trusted, so I'd stop looking at it. An app nobody looks at gets abandoned, quietly, with no cutover, and its history goes with it. A few months later a new app promises to fix everything, I migrate by hand, and the cycle starts again.
+
+A company would recognize this instantly. It's the department that bought its own tool, kept it alive with one person's heroics, and let it die when that person got busy. The tools were never the problem. The architecture was: point solutions, no integration, and a human as middleware. Manual interfaces don't survive contact with a real life.
+
+<Diagram name="human-as-middleware" />
+
+## The proposition
+
+Migrate the system out of my head, the same way a company migrates out of its spreadsheets.
+
+An event in my life gets recorded once, by the watch, the calendar or the bank, and it's immediately true everywhere it matters. The watch posts a short night, and the day's deep-work capacity drops, the training plan adjusts, and the week's variance shows it, and I typed nothing. One journal, my own ACDOCA, replaces five tools and one overloaded brain. A thirty-minute weekly close replaces the reconciliation I currently run all day, every day. Locked periods replace memory as the source of truth, which means, for the first time, there is one.
+
+## What it costs
+
+Discipline first, freedom later. A standard week, a standard meal plan, a chart of accounts, master data that gets maintained, a close that happens even in a bad week. Every company that implements an ERP learns that it demands more discipline at the start, not less. The difference is where the discipline is paid: once, in the system, instead of every day, in my head. Those costs are already being paid. The only question is the currency.
+
+## What comes next
+
+A real implementation doesn't start with software. It starts with the organizational structure: the company code, the periods, the currencies, the cost centers. Then master data, then the processes, then reporting and interfaces, then a cutover with a go-live date. This is the discovery phase, and the decision at the end of discovery is whether to proceed. I'm proceeding.
+
+I've decided to make this my next personal project. It would be the culmination of a lifelong pursuit of self-development. I'll document the implementation in future posts as the journey unfolds. It's also a good exercise for my professional craft: a way to understand and discover the underlying principles of enterprise architecture and resource planning.

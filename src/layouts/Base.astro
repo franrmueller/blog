@@ -120,7 +120,8 @@ const current = (key: string) => {
     </header>
 
     <!-- Appears top-right once the header has scrolled away; click unfolds the header row.
-         On touch screens the mark can be dragged to either side or tucked off the edge (see the script). -->
+         On touch screens the mark can be dragged to either side or tucked off the edge (see the script);
+         a note beside it says so the first few times it appears. -->
     <div class="corner">
       <nav class="corner-row" id="corner-menu" aria-label="Sections">
         <a class="corner-home" href="/" aria-label="Home">
@@ -135,6 +136,7 @@ const current = (key: string) => {
         <ThemeToggle maskId="sun-moon-mask-corner" />
       </nav>
       <button class="corner-mark" type="button" aria-expanded="false" aria-controls="corner-menu" aria-label="Menu" set:html={sunflower} />
+      <p class="corner-hint">{SITE.cornerHint}</p>
     </div>
     <main>
       <slot />
@@ -264,6 +266,7 @@ const current = (key: string) => {
         let drag = null;
         let lastDrop = 0;
         let applyPlace = () => {};
+        let onShow = () => {}; // touch screens: shows the hint the first few times
         const setOpen = (open) => {
           corner.classList.toggle('is-open', open);
           mark.setAttribute('aria-expanded', String(open));
@@ -276,6 +279,7 @@ const current = (key: string) => {
           const away = !entry.isIntersecting;
           corner.classList.toggle('is-visible', away);
           if (!away) setOpen(false);
+          else onShow();
         }).observe(header);
         mark.addEventListener('click', () => {
           if (performance.now() - lastDrop < 300) return; // the click that ends a drag
@@ -368,6 +372,46 @@ const current = (key: string) => {
         } catch {}
         addEventListener('resize', applyPlace);
 
+        // A short note beside the mark, in the row's place, saying it can be
+        // dragged and tucked away. It shows the first few times the mark
+        // appears on a device and stops for good once the reader has tapped
+        // or moved it; a remembered spot means they already have.
+        const hint = corner.querySelector('.corner-hint');
+        const HINT_VIEWS = 3;
+        const HINT_MS = 8000; // long enough to read it twice
+        let hintViews = Infinity; // stays so without storage: better never than every page
+        try {
+          const seen = localStorage.getItem('corner-hint');
+          hintViews = seen === 'done' ? Infinity : Number(seen) || 0;
+        } catch {}
+        let hintPending = Boolean(hint) && !place && hintViews < HINT_VIEWS;
+        let hintTimer;
+        const hideHint = () => {
+          clearTimeout(hintTimer);
+          corner.classList.remove('has-hint');
+        };
+        const learn = () => {
+          hintPending = false;
+          hideHint();
+          try {
+            localStorage.setItem('corner-hint', 'done');
+          } catch {}
+        };
+        onShow = () => {
+          if (!hintPending) return;
+          hintPending = false;
+          corner.classList.add('has-hint');
+          try {
+            localStorage.setItem('corner-hint', String(hintViews + 1));
+          } catch {}
+          hintTimer = setTimeout(hideHint, HINT_MS);
+        };
+        if (hint) hint.addEventListener('click', learn);
+        mark.addEventListener('click', learn);
+        addEventListener('click', (event) => {
+          if (!corner.contains(event.target)) hideHint();
+        });
+
         mark.addEventListener('pointerdown', (event) => {
           if (!event.isPrimary || drag) return;
           const box = mark.getBoundingClientRect();
@@ -382,6 +426,7 @@ const current = (key: string) => {
             if (Math.hypot(dx, dy) < 6) return; // still a tap; the click handler takes it
             drag.moved = true;
             peeking = false;
+            learn();
             setOpen(false);
             clearTimeout(settleTimer);
             corner.classList.add('is-dragging');

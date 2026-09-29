@@ -98,6 +98,7 @@
   }
 
   .corner-row,
+  .corner-hint,
   .popover-note {
     transition: opacity 200ms ease, transform 200ms ease, visibility 200ms;
   }
@@ -655,6 +656,14 @@ img {
   .post-heading {
     margin-top: 1.75rem;
   }
+
+  /* The footer no longer fits on one line, so the tagline takes the first
+     line by itself and the name and the AI disclaimer share the last one. */
+  .site-footer .site-tagline {
+    order: -1;
+    flex-basis: 100%;
+    margin-bottom: 0.5rem;
+  }
 }
 
 /* ---------- Home: Work and Mind side by side ---------- */
@@ -1004,6 +1013,41 @@ img {
   content: '';
   position: absolute;
   inset: -0.5rem;
+}
+
+/* The note that teaches the drag: it sits where the row will unfold, in the
+   same pill, and fades in with the same short slide. The script shows it the
+   first few times the mark appears on a touch screen (only while the mark is
+   still at its default spot, so it always hangs to the left) and drops it for
+   good once the reader has tapped or moved the mark. Over body text a
+   hairline keeps it from merging with the page, as with the footer notes.
+   The width is chosen so the copy in site.ts breaks into two even lines;
+   a new wording may want a new width. */
+.corner-hint {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 0.75rem);
+  width: max-content;
+  max-width: min(11.5rem, 100vw - 6.5rem);
+  text-wrap: balance;
+  margin: 0;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--muted) 35%, transparent);
+  border-radius: 1rem;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  text-align: right;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0.75rem, -50%);
+}
+
+.corner.has-hint .corner-hint {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -50%);
 }
 
 /* A mark on the left side unfolds its row to the right. */

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 530" role="img" aria-label="Today, five tools each connect only through the head, which integrates them by hand and decides from memory. In a Personal Resource Planning system, the watch, calendar and bank post into one journal that the modules read, and the head only reads the weekly close.">
+  <text class="label accent" x="20" y="24">TODAY</text>
+
+  <text x="20" y="70">Watch</text>
+  <text x="20" y="100">Calendar</text>
+  <text x="20" y="130">Bank</text>
+  <text x="20" y="160">Habit tracker</text>
+  <text x="20" y="190">Planner</text>
+
+  <path class="dim" d="M140 66c120 0 120 64 240 64M140 96c120 0 120 34 240 34M140 126c120 0 120 4 240 4M140 156c120 0 120-26 240-26M140 186c120 0 120-56 240-56"/>
+  <path class="dim" d="M372 125l8 5-8 5"/>
+  <text class="small" x="260" y="52" text-anchor="middle">typed by hand, every day</text>
+
+  <rect class="box" x="380" y="108" width="140" height="44" rx="4"/>
+  <text x="450" y="135" text-anchor="middle">Head</text>
+  <text class="small" x="450" y="176" text-anchor="middle">database, integration, scheduler, alerts</text>
+  <text class="small" x="450" y="194" text-anchor="middle">runs on biological RAM</text>
+
+  <path class="dim" d="M520 130c120 0 120-34 240-34M520 130h240M520 130c120 0 120 34 240 34"/>
+  <path class="dim" d="M752 91l8 5-8 5M752 125l8 5-8 5M752 159l8 5-8 5"/>
+  <text class="small" x="640" y="76" text-anchor="middle">decided from memory</text>
+  <text x="770" y="100">Training plan</text>
+  <text x="770" y="134">Budget</text>
+  <text x="770" y="168">The week</text>
+
+  <text class="small" x="450" y="232" text-anchor="middle">five apps, five interfaces, one overloaded server in the middle</text>
+
+  <path class="rule" d="M20 256h860"/>
+
+  <text class="label small" x="20" y="290">PERSONAL RESOURCE PLANNING</text>
+
+  <text x="20" y="330">Watch</text>
+  <text x="20" y="360">Calendar</text>
+  <text x="20" y="390">Bank</text>
+
+  <path class="flow" d="M140 326c120 0 120 30 240 30M140 356h240M140 386c120 0 120-30 240-30"/>
+  <path class="flow" d="M372 351l8 5-8 5"/>
+  <text class="small accent" x="450" y="318" text-anchor="middle">one event, recorded once, true everywhere it matters</text>
+
+  <rect class="box" x="380" y="334" width="140" height="44" rx="4"/>
+  <text x="450" y="361" text-anchor="middle">Journal</text>
+
+  <path class="flow" d="M520 356c120 0 120-44 240-44M520 356c120 0 120-14 240-14M520 356c120 0 120 16 240 16M520 356c120 0 120 46 240 46"/>
+  <path class="flow" d="M752 307l8 5-8 5M752 337l8 5-8 5M752 367l8 5-8 5M752 397l8 5-8 5"/>
+  <text x="770" y="316">Finance</text>
+  <text x="770" y="346">Health</text>
+  <text x="770" y="376">Time</text>
+  <text x="770" y="406">Controlling</text>
+
+  <path class="dim dash" d="M450 378v60"/>
+  <path class="dim" d="M446 432l4 6 4-6"/>
+  <text class="small" x="462" y="414">weekly close, thirty minutes</text>
+
+  <rect class="box" x="380" y="440" width="140" height="40" rx="4"/>
+  <text x="450" y="465" text-anchor="middle">Head</text>
+  <text class="small" x="450" y="508" text-anchor="middle">out of the data path: reads the close, sets the plan, carries nothing</text>
+</svg>
