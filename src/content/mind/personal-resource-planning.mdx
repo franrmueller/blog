@@ -21,21 +21,19 @@ Now the client is me.
 
 I already run a resource planning system. It's installed in the wrong place. My habits, plans, budget, meal rules, training schedule, and the list of things I've promised myself live in my head. My head is the S/4HANA. It's the database. It's the interface between the watch, the calendar and the bank. It's the scheduler that decides what runs today, and the alert system that fires "you forgot" at two in the morning. And it runs on biological RAM: no persistence, no backup, a working memory that holds a handful of items at once, and a full rebuild every morning.
 
-The operating costs are real, I just never saw them as costs. Every open commitment is a background process. It runs whether I'm using it or not, and it draws on the same energy that thinking, working and being present with people need. The symptoms are the low hum of things not done, the fog on days when too much is in memory, the decisions made badly because the data was in my head and my head was tired. When the server goes down, when I'm sick or exhausted or just had a bad week, the whole company stops, because nothing runs without me. And nothing is documented. When a routine slips, the data isn't archived. It's gone.
+The operating costs are real, I just never saw them as costs. Every open commitment is a background process. It runs whether I'm using it or not, and it draws on the same energy that thinking, working and being present with people need. The symptoms are the low hum of things not done, the fog on days when too much is in memory, the decisions made badly because the data was in my head and my head was tired. When the server goes down, when I'm sick or exhausted or just had a bad week, the whole company stops, because nothing runs without me. And nothing is documented. When I slip on a routine, the data isn't archived. It's gone.
 
-The cruelest part is the architecture. The processor that should be running my life is running my bookkeeping. It's the CEO doing the invoices, and the invoices are winning.
+The cruelest part is the architecture. The processor that should be running my life is running my bookkeeping. It's the CEO doing the invoices, and the invoices are always long overdue.
 
 ## The previous migration attempts
 
-I've tried to move parts of this out of my head before. A to-do app. A calendar. A planner. A habit tracker, then a better habit tracker, then a spreadsheet with a dashboard on top of it. Each one worked for a while, and each one failed the same way.
+I've tried to move parts of this out of my head before. A to-do app. A calendar. A planner. A habit tracker, then a better habit tracker, then a spreadsheet with a dashboard on top of it. Each one worked for a while, and each one ends up being discontinued.
 
-None of them fed the others, so every app was a data-entry job. The calendar didn't know what the tracker knew. The budget didn't know what the planner knew. The integration between them still ran on me, which means adding an app didn't remove load from my head, it added an interface to it. Five apps, five interfaces, all maintained by the same overloaded server.
+None of them fed the others, so every app was a data-entry job. The calendar didn't know what the tracker knew. The budget didn't know what the planner knew. The integration between them still ran on me, which means adding an app didn't remove load from my head, it added an interface to it. Five apps, five interfaces, all maintained by the same overloaded server (me).
 
-Then the pattern everyone knows. I'd miss a few entries. The data would go stale. Stale data can't be trusted, so I'd stop looking at it. An app nobody looks at gets abandoned, quietly, with no cutover, and its history goes with it. A few months later a new app promises to fix everything, I migrate by hand, and the cycle starts again.
+Then I see myself in the eternally-repeating pattern... I'd miss a few entries. The data would go stale. Stale data can't be trusted, so I'd stop looking at it. An app nobody looks at gets abandoned, quietly, with no cutover, and its history goes with it. A few months later a new app promises to fix everything, I migrate by hand, and the cycle starts again.
 
 A company would recognize this instantly. It's the department that bought its own tool, kept it alive with one person's heroics, and let it die when that person got busy. The tools were never the problem. The architecture was: point solutions, no integration, and a human as middleware. Manual interfaces don't survive contact with a real life.
-
-<Diagram name="human-as-middleware" />
 
 ## The proposition
 
@@ -43,11 +41,13 @@ Migrate the system out of my head, the same way a company migrates out of its sp
 
 An event in my life gets recorded once, by the watch, the calendar or the bank, and it's immediately true everywhere it matters. The watch posts a short night, and the day's deep-work capacity drops, the training plan adjusts, and the week's variance shows it, and I typed nothing. One journal, my own ACDOCA, replaces five tools and one overloaded brain. A thirty-minute weekly close replaces the reconciliation I currently run all day, every day. Locked periods replace memory as the source of truth, which means, for the first time, there is one.
 
+<Diagram name="human-as-middleware" />
+
 ## What it costs
 
 Discipline first, freedom later. A standard week, a standard meal plan, a chart of accounts, master data that gets maintained, a close that happens even in a bad week. Every company that implements an ERP learns that it demands more discipline at the start, not less. The difference is where the discipline is paid: once, in the system, instead of every day, in my head. Those costs are already being paid. The only question is the currency.
 
-## What comes next
+---
 
 A real implementation doesn't start with software. It starts with the organizational structure: the company code, the periods, the currencies, the cost centers. Then master data, then the processes, then reporting and interfaces, then a cutover with a go-live date. This is the discovery phase, and the decision at the end of discovery is whether to proceed. I'm proceeding.
 
