@@ -1,8 +1,9 @@
 ---
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import Share from '../../components/Share.astro';
 import { SECTIONS, SECTION_KEYS } from '../../site';
-import { coverUrl, formatDate, getPosts, isoDate, type Post } from '../../lib/posts';
+import { coverUrl, formatDate, getPosts, isoDate, postUrl, type Post } from '../../lib/posts';
 
 export async function getStaticPaths() {
   const paths = [];
@@ -23,6 +24,7 @@ const section = post.collection;
 const cover = coverUrl(post.data.cover);
 const { Content } = await render(post);
 const shareImage = `/${section}/${post.id}/share.jpg`;
+const permalink = new URL(postUrl(post), Astro.site).href;
 ---
 
 <Base
@@ -52,7 +54,10 @@ const shareImage = `/${section}/${post.id}/share.jpg`;
       <div class="prose post-body">
         <Content />
       </div>
-      <p class="post-back"><a href={`/${section}/`}>Back to {SECTIONS[section].title}</a></p>
+      <div class="post-end">
+        <p class="post-back"><a href={`/${section}/`}>Back to {SECTIONS[section].title}</a></p>
+        <Share title={post.data.title} url={permalink} />
+      </div>
     </div>
   </article>
 </Base>

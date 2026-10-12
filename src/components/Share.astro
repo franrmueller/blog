@@ -1,0 +1,28 @@
+---
+/**
+ * The share control at the end of a post: a small muted word that unfolds a
+ * note with the ways to share (copy the link, LinkedIn, email), in the
+ * pattern of the footer's notes. On touch screens the page script opens the
+ * system share sheet instead. Without JavaScript the note stays folded, like
+ * the others.
+ */
+interface Props {
+  title: string;
+  /** Absolute URL of the post, the same as its canonical link. */
+  url: string;
+}
+
+const { title, url } = Astro.props;
+
+const linkedin = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+const email = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(url)}`;
+---
+
+<div class="popover share" data-title={title} data-url={url}>
+  <button class="popover-button" type="button" aria-expanded="false" aria-controls="share-note">Share</button>
+  <ul class="popover-note share-links" id="share-note">
+    <li><button class="share-copy" type="button">Copy link</button></li>
+    <li><a href={linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+    <li><a href={email}>Email</a></li>
+  </ul>
+</div>

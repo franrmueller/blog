@@ -65,7 +65,8 @@
   }
 
   a,
-  .theme-toggle {
+  .theme-toggle,
+  .share-links button {
     transition: color 150ms ease;
   }
 
@@ -521,9 +522,19 @@ img {
   margin-top: 2rem;
 }
 
-.post-back {
-  margin: 3.5rem 0 0;
+/* The closing line: the way back to the section at the left and, at the
+   right, the share control. */
+.post-end {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-top: 3.5rem;
   font-size: 0.95rem;
+}
+
+.post-back {
+  margin: 0;
 }
 
 .post-back a {
@@ -532,6 +543,43 @@ img {
 }
 
 .post-back a:hover {
+  color: var(--accent);
+}
+
+/* The share control is a note like the footer's (see .popover): the word in
+   the line's size, its note hanging from the right edge with a row of the
+   ways to share, set like the name's row of profiles. On touch screens the
+   page script opens the system share sheet instead of the note. */
+.share .popover-button {
+  font-size: inherit;
+}
+
+.share .popover-note {
+  left: auto;
+  right: 0;
+}
+
+.share-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  list-style: none;
+  white-space: nowrap;
+}
+
+.share-links a,
+.share-links button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--muted);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.share-links a:hover,
+.share-links button:hover {
   color: var(--accent);
 }
 

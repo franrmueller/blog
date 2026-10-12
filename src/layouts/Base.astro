@@ -175,8 +175,8 @@ const current = (key: string) => {
       </div>
     </footer>
     <script is:inline>
-      // The JavaScript on the site: the theme toggle, the footer notes and the corner menu
-      // (which, on touch screens, can be dragged about and tucked away).
+      // The JavaScript on the site: the theme toggle, the footer notes, the share control at the end
+      // of a post and the corner menu (which, on touch screens, can be dragged about and tucked away).
       // Without it the site follows the system scheme, the notes stay folded and the header stays at the top.
       (() => {
         const root = document.documentElement;
@@ -223,9 +223,15 @@ const current = (key: string) => {
         });
         sync();
 
-        // Footer notes: the name and the AI disclaimer each unfold a note above their button.
-        // Opening one folds the other; Escape and a click elsewhere fold both.
+        // Notes: the footer's name and AI disclaimer, and the share control at the end of a post,
+        // each unfold a note above their button. Opening one folds the others; Escape and a click
+        // elsewhere fold them all. On touch screens the share button opens the system share sheet
+        // instead (below), so its note is left out here.
+        const share = document.querySelector('.share');
+        const sheet =
+          Boolean(share) && typeof navigator.share === 'function' && matchMedia('(pointer: coarse)').matches;
         const notes = [...document.querySelectorAll('.popover')]
+          .filter((el) => !(sheet && el === share))
           .map((el) => ({ el, button: el.querySelector('.popover-button') }))
           .filter((note) => note.button);
         const setNoteOpen = (note, open) => {
@@ -251,6 +257,37 @@ const current = (key: string) => {
             if (!note.el.contains(event.target)) setNoteOpen(note, false);
           }
         });
+
+        // Share: the system sheet on touch screens; elsewhere the note, whose first item copies the link.
+        if (share) {
+          const button = share.querySelector('.popover-button');
+          const { title, url } = share.dataset;
+          if (sheet) {
+            button.removeAttribute('aria-expanded');
+            button.removeAttribute('aria-controls');
+            button.addEventListener('click', () => {
+              navigator.share({ title, url }).catch(() => {}); // closing the sheet rejects too
+            });
+          }
+          const copy = share.querySelector('.share-copy');
+          if (copy) {
+            const label = copy.textContent;
+            let copyTimer;
+            copy.addEventListener('click', async () => {
+              try {
+                await navigator.clipboard.writeText(url);
+              } catch {
+                return;
+              }
+              copy.style.minWidth = `${copy.offsetWidth}px`; // "Copied" is shorter; the note keeps its width
+              copy.textContent = 'Copied';
+              clearTimeout(copyTimer);
+              copyTimer = setTimeout(() => {
+                copy.textContent = label;
+              }, 2000);
+            });
+          }
+        }
 
         // Corner menu: the sunflower shows while the header is off screen.
         const corner = document.querySelector('.corner');
