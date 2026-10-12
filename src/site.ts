@@ -18,6 +18,7 @@ export const SITE = {
   social: {
     linkedin: 'https://www.linkedin.com/in/franrmueller/',
     instagram: 'https://www.instagram.com/franrmuller/',
+    github: 'https://github.com/franrmueller',
   },
 } as const;
 
