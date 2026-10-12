@@ -1,6 +1,6 @@
 ---
 /**
- * The share control at the end of a post: a share icon that unfolds a row of
+ * The share control at the end of a post: a paper plane (like Telegram's send arrow) that unfolds a row of
  * icons beside it (copy the link, LinkedIn, X, email), each naming itself in
  * a tooltip on hover or focus (see [data-tip] in global.css). On touch
  * screens the page script opens the system share sheet instead. Without
@@ -37,9 +37,8 @@ const icon = {
 <div class="popover share" data-title={title} data-url={url}>
   <button class="popover-button" type="button" aria-label="Share" data-tip="Share" aria-expanded="false" aria-controls={id}>
     <svg {...icon}>
-      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-      <path d="m16 6-4-4-4 4" />
-      <path d="M12 2v13" />
+      <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
+      <path d="m21.854 2.147-10.94 10.939" />
     </svg>
   </button>
   <ul class="popover-note share-links" id={id}>
