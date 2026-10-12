@@ -25,6 +25,7 @@ const cover = coverUrl(post.data.cover);
 const { Content } = await render(post);
 const shareImage = `/${section}/${post.id}/share.jpg`;
 const permalink = new URL(postUrl(post), Astro.site).href;
+const back = `Back to ${SECTIONS[section].title}`;
 ---
 
 <Base
@@ -55,7 +56,14 @@ const permalink = new URL(postUrl(post), Astro.site).href;
         <Content />
       </div>
       <div class="post-end">
-        <p class="post-back"><a href={`/${section}/`}>Back to {SECTIONS[section].title}</a></p>
+        <p class="post-back">
+          <a href={`/${section}/`} aria-label={back} data-tip={back}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 12H5" />
+              <path d="m12 19-7-7 7-7" />
+            </svg>
+          </a>
+        </p>
         <Share title={post.data.title} url={permalink} />
       </div>
     </div>

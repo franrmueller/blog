@@ -224,7 +224,7 @@ const current = (key: string) => {
         sync();
 
         // Notes: the footer's name and AI disclaimer, and the share control at the end of a post,
-        // each unfold a note above their button. Opening one folds the others; Escape and a click
+        // each unfold a note by their button. Opening one folds the others; Escape and a click
         // elsewhere fold them all. On touch screens the share button opens the system share sheet
         // instead (below), so its note is left out here.
         const share = document.querySelector('.share');
@@ -271,20 +271,25 @@ const current = (key: string) => {
           }
           const copy = share.querySelector('.share-copy');
           if (copy) {
-            const label = copy.textContent;
+            const status = share.querySelector('[role="status"]');
+            const name = copy.dataset.tip;
             let copyTimer;
+            // For a moment the icon becomes a check, its tooltip says so and screen readers hear it.
+            const setCopied = (copied) => {
+              copy.classList.toggle('is-copied', copied);
+              copy.dataset.tip = copied ? 'Copied' : name;
+              copy.setAttribute('aria-label', copied ? 'Copied' : name);
+              if (status) status.textContent = copied ? 'Link copied' : '';
+            };
             copy.addEventListener('click', async () => {
               try {
                 await navigator.clipboard.writeText(url);
               } catch {
                 return;
               }
-              copy.style.minWidth = `${copy.offsetWidth}px`; // "Copied" is shorter; the note keeps its width
-              copy.textContent = 'Copied';
+              setCopied(true);
               clearTimeout(copyTimer);
-              copyTimer = setTimeout(() => {
-                copy.textContent = label;
-              }, 2000);
+              copyTimer = setTimeout(() => setCopied(false), 2000);
             });
           }
         }

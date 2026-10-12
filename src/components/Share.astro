@@ -1,10 +1,10 @@
 ---
 /**
- * The share control at the end of a post: a small muted word that unfolds a
- * note with the ways to share (copy the link, LinkedIn, email), in the
- * pattern of the footer's notes. On touch screens the page script opens the
- * system share sheet instead. Without JavaScript the note stays folded, like
- * the others.
+ * The share control at the end of a post: a share icon that unfolds a row of
+ * icons beside it (copy the link, LinkedIn, X, email), each naming itself in
+ * a tooltip on hover or focus (see [data-tip] in global.css). On touch
+ * screens the page script opens the system share sheet instead. Without
+ * JavaScript the row stays folded, like the footer's notes.
  */
 interface Props {
   title: string;
@@ -14,15 +14,71 @@ interface Props {
 
 const { title, url } = Astro.props;
 
-const linkedin = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
-const email = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(url)}`;
+const encodedUrl = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(title);
+const linkedin = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+const x = `https://x.com/intent/post?text=${encodedTitle}&url=${encodedUrl}`;
+const email = `mailto:?subject=${encodedTitle}&body=${encodedUrl}`;
+
+// Line icons drawn like the rest of the chrome.
+const icon = {
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  'stroke-width': '1.75',
+  'stroke-linecap': 'round',
+  'stroke-linejoin': 'round',
+  'aria-hidden': 'true',
+} as const;
 ---
 
 <div class="popover share" data-title={title} data-url={url}>
-  <button class="popover-button" type="button" aria-expanded="false" aria-controls="share-note">Share</button>
+  <button class="popover-button" type="button" aria-label="Share" data-tip="Share" aria-expanded="false" aria-controls="share-note">
+    <svg {...icon}>
+      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+      <path d="m16 6-4-4-4 4" />
+      <path d="M12 2v13" />
+    </svg>
+  </button>
   <ul class="popover-note share-links" id="share-note">
-    <li><button class="share-copy" type="button">Copy link</button></li>
-    <li><a href={linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-    <li><a href={email}>Email</a></li>
+    <li>
+      <button class="share-copy" type="button" aria-label="Copy link" data-tip="Copy link">
+        <svg class="share-copy-link" {...icon}>
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+        </svg>
+        <svg class="share-copy-done" {...icon}>
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+      </button>
+    </li>
+    <li>
+      <a href={linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" data-tip="LinkedIn">
+        <svg {...icon}>
+          <circle cx="5.75" cy="5" r="1.6" fill="currentColor" stroke="none" />
+          <path d="M5.75 9.75v10" />
+          <path d="M10.75 19.75v-10" />
+          <path d="M10.75 13.75a3.75 3.75 0 0 1 7.5 0v6" />
+        </svg>
+      </a>
+    </li>
+    <li>
+      <a href={x} target="_blank" rel="noopener noreferrer" aria-label="X" data-tip="X">
+        <svg {...icon}>
+          <path d="m5 4 14 16" />
+          <path d="m19 4-4.8 5.4" />
+          <path d="M9.8 14.6 5 20" />
+        </svg>
+      </a>
+    </li>
+    <li>
+      <a href={email} aria-label="Email" data-tip="Email">
+        <svg {...icon}>
+          <rect x="2" y="4" width="20" height="16" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+      </a>
+    </li>
   </ul>
+  <span class="sr-only" role="status"></span>
 </div>

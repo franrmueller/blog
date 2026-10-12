@@ -104,6 +104,16 @@
     transition: opacity 200ms ease, transform 200ms ease, visibility 200ms;
   }
 
+  /* Tooltips fade in after a short pause and fade straight out. */
+  [data-tip]::after {
+    transition: opacity 150ms ease, transform 150ms ease, visibility 150ms;
+  }
+
+  [data-tip]:hover::after,
+  [data-tip]:focus-visible::after {
+    transition-delay: 200ms;
+  }
+
   /* A home strip is much wider than it is tall, the post header is 3:1.
      Let both snapshots fill the morphing box instead of stretching. */
   .cover,
@@ -522,15 +532,14 @@ img {
   margin-top: 2rem;
 }
 
-/* The closing line: the way back to the section at the left and, at the
-   right, the share control. */
+/* The closing line: at the left the way back to the section, at the right
+   the share control. Both are icons, named in a tooltip (see [data-tip]). */
 .post-end {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 1rem;
   margin-top: 3.5rem;
-  font-size: 0.95rem;
 }
 
 .post-back {
@@ -538,41 +547,60 @@ img {
 }
 
 .post-back a {
+  display: inline-flex;
   color: var(--muted);
-  text-decoration: none;
 }
 
 .post-back a:hover {
   color: var(--accent);
 }
 
-/* The share control is a note like the footer's (see .popover): the word in
-   the line's size, its note hanging from the right edge with a row of the
-   ways to share, set like the name's row of profiles. On touch screens the
-   page script opens the system share sheet instead of the note. */
+.post-back svg,
+.share .popover-button svg {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* The share control is a note like the footer's (see .popover), but its row
+   of ways to share unfolds beside the icon, to the left, as the corner row
+   unfolds beside its mark; over the plain page it keeps the hairline. On
+   touch screens the page script opens the system share sheet instead. */
 .share .popover-button {
-  font-size: inherit;
+  display: inline-flex;
 }
 
 .share .popover-note {
+  top: 50%;
+  right: calc(100% + 0.75rem);
+  bottom: auto;
   left: auto;
-  right: 0;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  transform: translate(0.75rem, -50%);
+}
+
+.share.is-open .popover-note {
+  transform: translate(0, -50%);
 }
 
 .share-links {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1.1rem;
   list-style: none;
-  white-space: nowrap;
+}
+
+.share-links li {
+  display: flex;
 }
 
 .share-links a,
 .share-links button {
+  display: inline-flex;
   padding: 0;
   border: 0;
   background: none;
-  font: inherit;
   color: var(--muted);
   text-decoration: none;
   cursor: pointer;
@@ -581,6 +609,96 @@ img {
 .share-links a:hover,
 .share-links button:hover {
   color: var(--accent);
+}
+
+.share-links svg {
+  display: block;
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+/* After copying, the link icon gives way to a check for a moment. */
+.share-copy .share-copy-done,
+.share-copy.is-copied .share-copy-link {
+  display: none;
+}
+
+.share-copy.is-copied .share-copy-done {
+  display: block;
+}
+
+.share-copy.is-copied {
+  color: var(--accent);
+}
+
+/* ---------- Tooltips ---------- */
+
+/* Icon-only controls carry their name in data-tip (and in aria-label, for
+   screen readers): a small pill above the icon, in the notes' style, shown
+   on keyboard focus and, where a pointer can hover, on hover. --tip-x
+   centres it on the icon; at the edges of the column it is aligned to the
+   icon instead, so it never leaves the page. */
+[data-tip] {
+  --tip-x: -50%;
+  position: relative;
+}
+
+[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  z-index: 6;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--muted) 35%, transparent);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(var(--tip-x), 0.25rem);
+}
+
+[data-tip]:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(var(--tip-x), 0);
+}
+
+@media (hover: hover) {
+  [data-tip]:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(var(--tip-x), 0);
+  }
+}
+
+.post-back [data-tip] {
+  --tip-x: 0;
+}
+
+.post-back [data-tip]::after {
+  left: 0;
+}
+
+.share > [data-tip] {
+  --tip-x: 0;
+}
+
+.share > [data-tip]::after {
+  left: auto;
+  right: 0;
+}
+
+/* While the row is unfolded it speaks for itself. */
+.share.is-open > [data-tip]::after {
+  opacity: 0;
+  visibility: hidden;
 }
 
 /* ---------- Prose (Markdown body and the About page) ---------- */
