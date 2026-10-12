@@ -408,12 +408,15 @@ img {
   transform: translateY(0);
 }
 
-/* The name's note: the author's profiles as a row of icons, drawn like the
-   rest of the chrome and muted until hovered. */
+/* The name's note: the author's profiles as a column of icons on a narrow
+   pill, drawn like the rest of the chrome and muted until hovered. */
 .social-links {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.9rem;
+  padding: 0.85rem 0.6rem;
+  border-radius: 999px;
   list-style: none;
 }
 
@@ -562,51 +565,51 @@ img {
   height: 1.25rem;
 }
 
-/* The share control is a note like the footer's (see .popover), but its row
-   of ways to share unfolds beside the icon, to the left, as the corner row
-   unfolds beside its mark; over the plain page it keeps the hairline. On
-   touch screens the page script opens the system share sheet instead. */
+/* The share control is a note like the footer's (see .popover): its ways to
+   share unfold as a column on a narrow pill above the icon, centred on it;
+   over the plain page it keeps the hairline. On touch screens the page
+   script opens the system share sheet instead. */
 .share .popover-button {
   display: inline-flex;
 }
 
 .share .popover-note {
-  top: 50%;
-  right: calc(100% + 0.75rem);
-  bottom: auto;
-  left: auto;
-  padding: 0.5rem 1rem;
+  left: 50%;
+  padding: 0.85rem 0.6rem;
   border-radius: 999px;
-  transform: translate(0.75rem, -50%);
+  transform: translate(-50%, 0.5rem);
 }
 
 .share.is-open .popover-note {
-  transform: translate(0, -50%);
+  transform: translate(-50%, 0);
 }
 
-/* On post pages the corner menu's row ends with the same control; there the
-   row of ways to share hangs below the icon, aligned to its outer edge. */
+/* On post pages the corner menu's column ends with the same control; there
+   its column stands beside the menu's, centred on the icon, on the side
+   away from the screen's edge. */
 .corner .share .popover-note {
-  top: calc(100% + 0.6rem);
-  right: 0;
+  top: 50%;
   bottom: auto;
   left: auto;
-  transform: translate(0, -0.5rem);
+  right: calc(100% + 1.75rem);
+  transform: translate(0.5rem, -50%);
 }
 
 .corner.is-left .share .popover-note {
   right: auto;
-  left: 0;
+  left: calc(100% + 1.75rem);
+  transform: translate(-0.5rem, -50%);
 }
 
 .corner .share.is-open .popover-note {
-  transform: translate(0, 0);
+  transform: translate(0, -50%);
 }
 
 .share-links {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1.1rem;
+  gap: 0.9rem;
   list-style: none;
 }
 
@@ -654,12 +657,15 @@ img {
 
 /* Icon-only controls carry their name in data-tip (and in aria-label, for
    screen readers): a small pill above the icon, in the notes' style, shown
-   on keyboard focus and, where a pointer can hover, on hover. --tip-x
-   centres it on the icon; at the edges of the column it is aligned to the
-   icon instead, so it never leaves the page. */
+   on keyboard focus and, where a pointer can hover, on hover. --tip-x and
+   --tip-y place it (centred on the icon by default; at the edges of the
+   column it is aligned to the icon instead, so it never leaves the page);
+   --tip-dx and --tip-dy are the short slide it makes as it appears. */
 [data-tip] {
   --tip-x: -50%;
-  --tip-y: 0.25rem;
+  --tip-y: 0;
+  --tip-dx: 0;
+  --tip-dy: 0.25rem;
   position: relative;
 }
 
@@ -681,20 +687,20 @@ img {
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
-  transform: translate(var(--tip-x), var(--tip-y));
+  transform: translate(calc(var(--tip-x) + var(--tip-dx)), calc(var(--tip-y) + var(--tip-dy)));
 }
 
 [data-tip]:focus-visible::after {
   opacity: 1;
   visibility: visible;
-  transform: translate(var(--tip-x), 0);
+  transform: translate(var(--tip-x), var(--tip-y));
 }
 
 @media (hover: hover) {
   [data-tip]:hover::after {
     opacity: 1;
     visibility: visible;
-    transform: translate(var(--tip-x), 0);
+    transform: translate(var(--tip-x), var(--tip-y));
   }
 }
 
@@ -721,15 +727,33 @@ img {
   visibility: hidden;
 }
 
-/* In the corner menu, at the top of the screen, tooltips hang below their
-   icons instead, and so does the share row (see .corner .share below). */
-.corner [data-tip] {
-  --tip-y: -0.25rem;
+/* In the vertical menus (the corner column and the share columns) a tooltip
+   above an icon would cover the one above it, so it stands beside the icon
+   instead: to its left, or to its right when the corner mark has been moved
+   to the left side. */
+.corner [data-tip],
+.share-links [data-tip] {
+  --tip-x: 0;
+  --tip-y: -50%;
+  --tip-dx: 0.25rem;
+  --tip-dy: 0;
 }
 
-.corner [data-tip]::after {
-  top: calc(100% + 0.5rem);
+.corner [data-tip]::after,
+.share-links [data-tip]::after {
+  top: 50%;
+  right: calc(100% + 0.6rem);
   bottom: auto;
+  left: auto;
+}
+
+.corner.is-left [data-tip] {
+  --tip-dx: -0.25rem;
+}
+
+.corner.is-left [data-tip]::after {
+  right: auto;
+  left: calc(100% + 0.6rem);
 }
 
 /* ---------- Prose (Markdown body and the About page) ---------- */
@@ -1115,17 +1139,19 @@ img {
   color: var(--accent);
 }
 
-/* The header row, folded into the mark until it is opened. It unfolds to
-   the left of the mark on a pill in the page colour, so it stays legible
-   over images without a border or a shadow. */
+/* The header row, folded into the mark until it is opened. It unfolds as a
+   column below the mark (above it when the mark sits in the lower half of
+   the screen) on a pill in the page colour, so it stays legible over images
+   without a border or a shadow. */
 .corner-row {
   position: absolute;
-  top: 50%;
-  right: calc(100% + 0.75rem);
+  top: calc(100% + 0.6rem);
+  left: 50%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
-  padding: 0.45rem 1rem;
+  gap: 0.9rem;
+  padding: 0.85rem 0.6rem;
   border-radius: 999px;
   background: var(--bg);
   font-size: 0.95rem;
@@ -1133,13 +1159,23 @@ img {
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
-  transform: translate(0.75rem, -50%);
+  transform: translate(-50%, -0.5rem);
 }
 
 .corner.is-open .corner-row {
   opacity: 1;
   visibility: visible;
-  transform: translate(0, -50%);
+  transform: translate(-50%, 0);
+}
+
+.corner.is-bottom .corner-row {
+  top: auto;
+  bottom: calc(100% + 0.6rem);
+  transform: translate(-50%, 0.5rem);
+}
+
+.corner.is-bottom.is-open .corner-row {
+  transform: translate(-50%, 0);
 }
 
 .corner-row a {
@@ -1258,13 +1294,3 @@ img {
   transform: translate(0, -50%);
 }
 
-/* A mark on the left side unfolds its row to the right. */
-.corner.is-left .corner-row {
-  right: auto;
-  left: calc(100% + 0.75rem);
-  transform: translate(-0.75rem, -50%);
-}
-
-.corner.is-left.is-open .corner-row {
-  transform: translate(0, -50%);
-}

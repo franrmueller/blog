@@ -384,6 +384,7 @@ const current = (key: string) => {
         };
         const setClasses = () => {
           corner.classList.toggle('is-left', place.side === 'left');
+          corner.classList.toggle('is-bottom', place.anchor === 'bottom'); // the row then unfolds upwards
           corner.classList.toggle('is-tucked', place.tucked && !peeking);
         };
         // Beside the text column on the given side, or in the gutter when the
