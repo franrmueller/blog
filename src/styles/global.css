@@ -80,9 +80,9 @@
     transition: --sun 300ms ease;
   }
 
-  /* The corner mark fades in; the header row unfolds out of it. On touch
-     screens the mark also glides to where it is dropped and shrinks into
-     its tab when tucked away. */
+  /* The corner mark fades in; the header row unfolds out of it. The mark
+     also glides to where it is dropped and shrinks into its tab when
+     tucked away. */
   .corner {
     transition:
       opacity 150ms ease,
@@ -1064,15 +1064,27 @@ img {
 
 /* ---------- Corner menu ---------- */
 
-/* Fixed top-right once the header has scrolled away. The mark stands on
-   its own; only the unfolded row gets a page-coloured pill behind it. */
+/* Fixed at the top, just right of the text column, once the header has
+   scrolled away; when the column fills the screen it sits in the gutter at
+   the top-right instead. The mark stands on its own; only the unfolded row
+   gets a page-coloured pill behind it. Once the reader has dragged it, the
+   page script places it with inline styles (see below). */
 .corner {
   position: fixed;
   top: 1.1rem;
-  right: 1.25rem;
+  /* The column is centred and at most measure + gutters wide; the mark is 1.75rem wide. */
+  left: min(
+    calc(50% + (var(--measure) + 2 * var(--gutter)) / 2 + 0.5rem),
+    calc(100% - var(--gutter) - 1.75rem)
+  );
   z-index: 10;
   opacity: 0;
   visibility: hidden;
+}
+
+/* Home uses the wider column; the mark follows it. */
+.corner-wide {
+  --measure: 60rem;
 }
 
 .corner.is-visible {
@@ -1080,9 +1092,11 @@ img {
   visibility: visible;
 }
 
+/* A block, so the fixed box is exactly the mark's size: the script anchors
+   that box to the screen's edges, and the row and hint centre on it. */
 .corner-mark {
   position: relative;
-  display: inline-flex;
+  display: flex;
   padding: 0;
   border: 0;
   background: none;
@@ -1148,19 +1162,16 @@ img {
   height: 1.25rem;
 }
 
-/* On touch screens the page script lets the reader drag the mark: to any
-   height on either side, or off the side of the screen, where it tucks into
-   the nearest corner and leaves a small tab on the edge, like the volume
-   indicator on a phone. A tap on the tab shows the mark and opens the row.
-   The script positions the mark with inline styles and these classes;
-   with a mouse none of them apply and the mark stays top-right. */
-@media (pointer: coarse) {
-  .corner-mark {
-    touch-action: none;
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-touch-callout: none;
-  }
+/* The page script lets the reader drag the mark: to any height on either
+   side of the text, or off the side of the screen, where it tucks into the
+   nearest corner and leaves a small tab on the edge, like the volume
+   indicator on a phone. A click on the tab shows the mark and opens the row.
+   The script positions the mark with inline styles and these classes. */
+.corner-mark {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 /* No glide while the finger holds it (the script also uses this to place
@@ -1214,7 +1225,7 @@ img {
 
 /* The note that teaches the drag: it sits where the row will unfold, in the
    same pill, and fades in with the same short slide. The script shows it the
-   first few times the mark appears on a touch screen (only while the mark is
+   first few times the mark appears (only while the mark is
    still at its default spot, so it always hangs to the left) and drops it for
    good once the reader has tapped or moved the mark. Over body text a
    hairline keeps it from merging with the page, as with the footer notes.

@@ -122,10 +122,11 @@ const current = (key: string) => {
       </div>
     </header>
 
-    <!-- Appears top-right once the header has scrolled away; click unfolds the header row.
-         On touch screens the mark can be dragged to either side or tucked off the edge (see the script);
-         a note beside it says so the first few times it appears. -->
-    <div class="corner">
+    <!-- Appears beside the text column (top-right of the screen when the column fills it) once the header
+         has scrolled away; click unfolds the header row. The mark can be dragged to either side of the text
+         or tucked off the edge of the screen (see the script); a note beside it says so the first few times
+         it appears. -->
+    <div class:list={['corner', { 'corner-wide': wide }]}>
       <nav class="corner-row" id="corner-menu" aria-label="Sections">
         <a class="corner-home" href="/" aria-label="Home">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -180,7 +181,7 @@ const current = (key: string) => {
     </footer>
     <script is:inline>
       // The JavaScript on the site: the theme toggle, the footer notes, the share control at the end
-      // of a post and the corner menu (which, on touch screens, can be dragged about and tucked away).
+      // of a post and the corner menu (which can be dragged about and tucked away).
       // Without it the site follows the system scheme, the notes stay folded and the header stays at the top.
       (() => {
         const root = document.documentElement;
@@ -349,13 +350,14 @@ const current = (key: string) => {
           if (!corner.contains(event.target)) setOpen(false);
         });
 
-        // Touch screens: the mark can be dragged to any height on either side,
-        // or pushed off a side of the screen, where it tucks into the nearest
+        // The mark can be dragged to any height on either side of the text, or
+        // pushed off a side of the screen, where it tucks into the nearest
         // corner and leaves a small tab on the edge. The spot is kept per device.
-        if (!matchMedia('(pointer: coarse)').matches || !('PointerEvent' in window)) return;
-        const rest = getComputedStyle(corner);
-        const EDGE_X = parseFloat(rest.right) || 20;
-        const EDGE_Y = parseFloat(rest.top) || 18;
+        if (!('PointerEvent' in window)) return;
+        const column = document.querySelector('.column');
+        const EDGE_X = 20; // 1.25rem, the page gutter: the inset when the column fills the screen, and for a peek
+        const EDGE_Y = parseFloat(getComputedStyle(corner).top) || 18;
+        const GAP = 8; // 0.5rem between the text column and the mark, as in the stylesheet
         const TUCK = 16; // a mark dropped with its centre this close to a side edge tucks away
         const SETTLE = 260; // ms, a little over the glide in the stylesheet
         const clamp = (value, low, high) => Math.min(Math.max(value, low), high);
@@ -376,8 +378,15 @@ const current = (key: string) => {
           corner.classList.toggle('is-left', place.side === 'left');
           corner.classList.toggle('is-tucked', place.tucked && !peeking);
         };
+        // Beside the text column on the given side, or in the gutter when the
+        // column fills the screen. A peek from the tab shows the mark near it.
+        const sideInset = (side) => {
+          const col = column ? column.getBoundingClientRect() : { left: 0, right: viewWidth() };
+          const room = side === 'left' ? col.left : viewWidth() - col.right;
+          return Math.max(room - GAP - mark.offsetWidth, EDGE_X);
+        };
         const insets = () => ({
-          x: place.tucked && !peeking ? 0 : EDGE_X,
+          x: place.tucked ? (peeking ? EDGE_X : 0) : sideInset(place.side),
           y: place.tucked ? EDGE_Y : clamp(place.offset, EDGE_Y, offsetLimit()),
         });
         applyPlace = () => {
