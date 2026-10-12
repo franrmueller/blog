@@ -4,6 +4,7 @@ import '../styles/global.css';
 import { SITE, LIBRARY_PUBLIC } from '../site';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import LibraryLink from '../components/LibraryLink.astro';
+import Share from '../components/Share.astro';
 import { SHARE_WIDTH, SHARE_HEIGHT } from '../lib/share-image';
 import sunflowerSvg from '../../public/favicon.svg?raw';
 
@@ -50,6 +51,8 @@ const column = wide ? 'column column-wide' : 'column';
 const pageTitle = title ? `${title} · ${SITE.name}` : SITE.name;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image ? new URL(image, Astro.site) : undefined;
+// Post pages also offer the share control in the corner menu's row.
+const share = type === 'article' && title ? { title, url: canonical.href } : undefined;
 
 const nav = [
   { key: 'work', href: '/work/', label: 'Work' },
@@ -134,6 +137,7 @@ const current = (key: string) => {
         {nav.map((item) => <a href={item.href} aria-current={current(item.key)}>{item.label}</a>)}
         {LIBRARY_PUBLIC && <LibraryLink current={current('library')} />}
         <ThemeToggle maskId="sun-moon-mask-corner" />
+        {share && <Share title={share.title} url={share.url} id="share-note-corner" />}
       </nav>
       <button class="corner-mark" type="button" aria-expanded="false" aria-controls="corner-menu" aria-label="Menu" set:html={sunflower} />
       <p class="corner-hint">{SITE.cornerHint}</p>
@@ -227,11 +231,11 @@ const current = (key: string) => {
         // each unfold a note by their button. Opening one folds the others; Escape and a click
         // elsewhere fold them all. On touch screens the share button opens the system share sheet
         // instead (below), so its note is left out here.
-        const share = document.querySelector('.share');
+        const shares = [...document.querySelectorAll('.share')];
         const sheet =
-          Boolean(share) && typeof navigator.share === 'function' && matchMedia('(pointer: coarse)').matches;
+          shares.length > 0 && typeof navigator.share === 'function' && matchMedia('(pointer: coarse)').matches;
         const notes = [...document.querySelectorAll('.popover')]
-          .filter((el) => !(sheet && el === share))
+          .filter((el) => !(sheet && shares.includes(el)))
           .map((el) => ({ el, button: el.querySelector('.popover-button') }))
           .filter((note) => note.button);
         const setNoteOpen = (note, open) => {
@@ -250,6 +254,8 @@ const current = (key: string) => {
             if (!note.el.classList.contains('is-open')) continue;
             setNoteOpen(note, false);
             note.button.focus();
+            // A note inside the corner menu folds on its own first; the next Escape closes the menu.
+            event.stopImmediatePropagation();
           }
         });
         addEventListener('click', (event) => {
@@ -258,8 +264,9 @@ const current = (key: string) => {
           }
         });
 
-        // Share: the system sheet on touch screens; elsewhere the note, whose first item copies the link.
-        if (share) {
+        // Share (the closing line and, on post pages, the corner menu): the system sheet on touch
+        // screens; elsewhere the row of ways to share, whose first icon copies the link.
+        for (const share of shares) {
           const button = share.querySelector('.popover-button');
           const { title, url } = share.dataset;
           if (sheet) {
@@ -312,6 +319,8 @@ const current = (key: string) => {
         const setOpen = (open) => {
           corner.classList.toggle('is-open', open);
           mark.setAttribute('aria-expanded', String(open));
+          // Closing the row folds the share row inside it too.
+          if (!open) for (const note of notes) if (corner.contains(note.el)) setNoteOpen(note, false);
           if (!open && peeking) {
             peeking = false;
             applyPlace();

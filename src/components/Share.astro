@@ -10,9 +10,11 @@ interface Props {
   title: string;
   /** Absolute URL of the post, the same as its canonical link. */
   url: string;
+  /** The row's id. A page with two share controls (the corner menu has one too) gives the second its own. */
+  id?: string;
 }
 
-const { title, url } = Astro.props;
+const { title, url, id = 'share-note' } = Astro.props;
 
 const encodedUrl = encodeURIComponent(url);
 const encodedTitle = encodeURIComponent(title);
@@ -33,14 +35,14 @@ const icon = {
 ---
 
 <div class="popover share" data-title={title} data-url={url}>
-  <button class="popover-button" type="button" aria-label="Share" data-tip="Share" aria-expanded="false" aria-controls="share-note">
+  <button class="popover-button" type="button" aria-label="Share" data-tip="Share" aria-expanded="false" aria-controls={id}>
     <svg {...icon}>
       <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
       <path d="m16 6-4-4-4 4" />
       <path d="M12 2v13" />
     </svg>
   </button>
-  <ul class="popover-note share-links" id="share-note">
+  <ul class="popover-note share-links" id={id}>
     <li>
       <button class="share-copy" type="button" aria-label="Copy link" data-tip="Copy link">
         <svg class="share-copy-link" {...icon}>

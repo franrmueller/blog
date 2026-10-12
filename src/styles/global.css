@@ -584,6 +584,25 @@ img {
   transform: translate(0, -50%);
 }
 
+/* On post pages the corner menu's row ends with the same control; there the
+   row of ways to share hangs below the icon, aligned to its outer edge. */
+.corner .share .popover-note {
+  top: calc(100% + 0.6rem);
+  right: 0;
+  bottom: auto;
+  left: auto;
+  transform: translate(0, -0.5rem);
+}
+
+.corner.is-left .share .popover-note {
+  right: auto;
+  left: 0;
+}
+
+.corner .share.is-open .popover-note {
+  transform: translate(0, 0);
+}
+
 .share-links {
   display: flex;
   align-items: center;
@@ -640,6 +659,7 @@ img {
    icon instead, so it never leaves the page. */
 [data-tip] {
   --tip-x: -50%;
+  --tip-y: 0.25rem;
   position: relative;
 }
 
@@ -661,7 +681,7 @@ img {
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
-  transform: translate(var(--tip-x), 0.25rem);
+  transform: translate(var(--tip-x), var(--tip-y));
 }
 
 [data-tip]:focus-visible::after {
@@ -699,6 +719,17 @@ img {
 .share.is-open > [data-tip]::after {
   opacity: 0;
   visibility: hidden;
+}
+
+/* In the corner menu, at the top of the screen, tooltips hang below their
+   icons instead, and so does the share row (see .corner .share below). */
+.corner [data-tip] {
+  --tip-y: -0.25rem;
+}
+
+.corner [data-tip]::after {
+  top: calc(100% + 0.5rem);
+  bottom: auto;
 }
 
 /* ---------- Prose (Markdown body and the About page) ---------- */
