@@ -721,8 +721,25 @@ img {
   right: 0;
 }
 
-/* While the row is unfolded it speaks for itself. */
-.share.is-open > [data-tip]::after {
+/* The footer name: its tooltip hangs from the name's left edge, since the
+   name starts the column, and the page script shows it by itself for a few
+   seconds when the footer comes into view (.tip-on). */
+.name-button {
+  --tip-x: 0;
+}
+
+.name-button::after {
+  left: 0;
+}
+
+.name-button.tip-on::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(var(--tip-x), var(--tip-y));
+}
+
+/* While a note is unfolded it speaks for itself. */
+.popover.is-open > [data-tip]::after {
   opacity: 0;
   visibility: hidden;
 }

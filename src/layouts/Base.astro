@@ -175,7 +175,7 @@ const current = (key: string) => {
       <!-- The name and, at the far right, the AI disclaimer are buttons; each unfolds a note above itself,
            like the corner menu unfolds beside its mark. The name's note holds the profile links. -->
       <div class="popover">
-        <button class="popover-button" type="button" aria-expanded="false" aria-controls="social-links">{SITE.shortName}</button>
+        <button class="popover-button name-button" type="button" aria-expanded="false" aria-controls="social-links" data-tip={SITE.nameHint}>{SITE.shortName}</button>
         <ul class="popover-note social-links" id="social-links">
           <li>
             <a href={SITE.social.linkedin} target="_blank" rel="me noopener noreferrer" aria-label="LinkedIn">
@@ -297,6 +297,25 @@ const current = (key: string) => {
             if (!note.el.contains(event.target)) setNoteOpen(note, false);
           }
         });
+
+        // The footer name says what it opens: its tooltip shows by itself for a few seconds the
+        // first time the name comes into view on a page, then fades (a click hides it at once).
+        const nameButton = document.querySelector('.name-button');
+        if (nameButton && 'IntersectionObserver' in window) {
+          let nameTimer;
+          const hideNameTip = () => {
+            clearTimeout(nameTimer);
+            nameButton.classList.remove('tip-on');
+          };
+          const seen = new IntersectionObserver(([entry]) => {
+            if (!entry.isIntersecting) return;
+            seen.disconnect();
+            nameButton.classList.add('tip-on');
+            nameTimer = setTimeout(hideNameTip, 4000);
+          }, { threshold: 1 });
+          seen.observe(nameButton);
+          nameButton.addEventListener('click', hideNameTip);
+        }
 
         // Share (the closing line and, on post pages, the corner menu): the system sheet on touch
         // screens; elsewhere the row of ways to share, whose first icon copies the link.
