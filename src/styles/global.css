@@ -114,6 +114,10 @@
     transition-delay: 200ms;
   }
 
+  .name-hint {
+    transition: opacity 150ms ease, transform 150ms ease, visibility 150ms;
+  }
+
   /* A home strip is much wider than it is tall, the post header is 3:1.
      Let both snapshots fill the morphing box instead of stretching. */
   .cover,
@@ -721,21 +725,60 @@ img {
   right: 0;
 }
 
-/* The footer name: its tooltip hangs from the name's left edge, since the
-   name starts the column, and the page script shows it by itself for a few
-   seconds when the footer comes into view (.tip-on). */
-.name-button {
-  --tip-x: 0;
-}
-
-.name-button::after {
+/* The footer name's hint: a tooltip-style pill above the name that shows
+   the words and, small, the three profile icons the name opens. It appears
+   on hover and keyboard focus, by itself for a few seconds when the footer
+   comes into view (.is-shown, set by the page script), and never while the
+   list is open. */
+.name-hint {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
   left: 0;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--muted) 35%, transparent);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.25rem);
 }
 
-.name-button.tip-on::after {
+.name-hint svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.name-hint svg:first-of-type {
+  margin-left: 0.15rem;
+}
+
+.name-hint.is-shown,
+.name-button:focus-visible + .name-hint {
   opacity: 1;
   visibility: visible;
-  transform: translate(var(--tip-x), var(--tip-y));
+  transform: translateY(0);
+}
+
+@media (hover: hover) {
+  .name-button:hover + .name-hint {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+.popover.is-open .name-hint {
+  opacity: 0;
+  visibility: hidden;
 }
 
 /* While a note is unfolded it speaks for itself. */
@@ -749,7 +792,8 @@ img {
    instead: to its left, or to its right when the corner mark has been moved
    to the left side. */
 .corner [data-tip],
-.share-links [data-tip] {
+.share-links [data-tip],
+.social-links [data-tip] {
   --tip-x: 0;
   --tip-y: -50%;
   --tip-dx: 0.25rem;
@@ -757,7 +801,8 @@ img {
 }
 
 .corner [data-tip]::after,
-.share-links [data-tip]::after {
+.share-links [data-tip]::after,
+.social-links [data-tip]::after {
   top: 50%;
   right: calc(100% + 0.6rem);
   bottom: auto;

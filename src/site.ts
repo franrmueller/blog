@@ -14,8 +14,8 @@ export const SITE = {
   },
   /** The note shown beside the corner mark the first few times it appears. */
   cornerHint: 'Drag to move it, or push it off the side to hide it.',
-  /** The footer name's tooltip; it also shows by itself for a few seconds when the footer comes into view. */
-  nameHint: 'More about me here',
+  /** The footer name's hint, followed by the profile icons; it shows by itself for a few seconds when the footer comes into view. */
+  nameHint: 'Find me on',
   /** The footer name's pop-up: the author's profiles, in the order shown. */
   social: {
     linkedin: 'https://www.linkedin.com/in/franrmueller/',
