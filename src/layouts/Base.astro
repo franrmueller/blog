@@ -293,10 +293,26 @@ const current = (key: string) => {
           note.el.classList.toggle('is-open', open);
           note.button.setAttribute('aria-expanded', String(open));
         };
+        // With a mouse, resting on a button unfolds its note and leaving the note folds it
+        // (after a moment, so the pointer can cross the gap); a click still toggles it, for
+        // touch screens and keyboards.
+        const canHover = matchMedia('(hover: hover)').matches;
+        const LEAVE_MS = 250;
         for (const note of notes) {
           note.button.addEventListener('click', () => {
             const open = !note.el.classList.contains('is-open');
             for (const other of notes) setNoteOpen(other, other === note && open);
+          });
+          if (!canHover) continue;
+          let leaveTimer;
+          note.el.addEventListener('pointerenter', (event) => {
+            if (event.pointerType !== 'mouse') return;
+            clearTimeout(leaveTimer);
+            for (const other of notes) setNoteOpen(other, other === note);
+          });
+          note.el.addEventListener('pointerleave', (event) => {
+            if (event.pointerType !== 'mouse') return;
+            leaveTimer = setTimeout(() => setNoteOpen(note, false), LEAVE_MS);
           });
         }
         addEventListener('keydown', (event) => {
@@ -403,16 +419,32 @@ const current = (key: string) => {
           if (!away) setOpen(false);
           else onShow();
         }).observe(header);
-        mark.addEventListener('click', () => {
-          if (performance.now() - lastDrop < 300) return; // the click that ends a drag
+        const show = () => {
           if (place && place.tucked && !peeking) {
             peeking = true;
             applyPlace();
-            setOpen(true);
-            return;
           }
+          setOpen(true);
+        };
+        mark.addEventListener('click', () => {
+          if (performance.now() - lastDrop < 300) return; // the click that ends a drag
+          if (place && place.tucked && !peeking) return show();
           setOpen(!corner.classList.contains('is-open'));
         });
+        // With a mouse, resting on the mark (or its tab) unfolds the column; leaving the
+        // whole menu folds it again after a moment.
+        if (canHover) {
+          let leaveTimer;
+          corner.addEventListener('pointerenter', (event) => {
+            if (event.pointerType !== 'mouse' || drag) return;
+            clearTimeout(leaveTimer);
+            show();
+          });
+          corner.addEventListener('pointerleave', (event) => {
+            if (event.pointerType !== 'mouse' || drag) return;
+            leaveTimer = setTimeout(() => setOpen(false), LEAVE_MS);
+          });
+        }
         addEventListener('keydown', (event) => {
           if (event.key === 'Escape') setOpen(false);
         });

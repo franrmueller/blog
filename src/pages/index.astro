@@ -8,6 +8,7 @@ const columns = await Promise.all(
   SECTION_KEYS.map(async (section) => ({
     section,
     title: SECTIONS[section].title,
+    about: SECTIONS[section].about,
     posts: await getPosts(section),
   })),
 );
@@ -22,13 +23,14 @@ const preloadImage = firstPost ? coverUrl(firstPost.data.cover) : undefined;
     <p class="home-about">Some of my conversations with Claude, synthesized into blog posts documenting my learning journey.</p>
     <div class="home">
       {
-        columns.map(({ section, title, posts }, index) => (
+        columns.map(({ section, title, about, posts }, index) => (
           <>
             {index > 0 && <div class="home-divider" aria-hidden="true" />}
             <section class="home-section">
               <h2 class="home-label">
                 <a href={`/${section}/`}>{title}</a>
               </h2>
+              <p class="home-section-about">{about}</p>
               <PostStrips posts={posts} />
             </section>
           </>

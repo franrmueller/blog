@@ -1032,6 +1032,17 @@ img {
   text-decoration: none;
 }
 
+/* Each column's intro, the same text as on its section page, set smaller
+   under the label in the title face. */
+.home-section-about {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--muted);
+  margin: -0.5rem 0 1.25rem;
+}
+
 .strips {
   list-style: none;
   margin: 0;
