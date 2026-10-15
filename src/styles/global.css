@@ -757,6 +757,42 @@ img {
   height: 0.9rem;
 }
 
+/* A speech bubble: rounded, with a tail under its left end that points down
+   at the name. The tail is a small square turned 45°, in the page colour,
+   carrying the bubble's hairline on its two outer sides. */
+.name-hint {
+  bottom: calc(100% + 0.7rem);
+  border-radius: 0.75rem;
+}
+
+.name-hint::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 1.5rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 1px solid color-mix(in srgb, var(--muted) 35%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--muted) 35%, transparent);
+  background: var(--bg);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+/* "Click" with a mouse, "Tap" on a touch screen. */
+.hint-touch {
+  display: none;
+}
+
+@media (hover: none) {
+  .hint-pointer {
+    display: none;
+  }
+
+  .hint-touch {
+    display: inline;
+  }
+}
+
 .name-hint svg:first-of-type {
   margin-left: 0.15rem;
 }

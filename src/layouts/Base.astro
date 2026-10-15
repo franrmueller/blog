@@ -205,9 +205,10 @@ const current = (key: string) => {
            like the corner menu unfolds beside its mark. The name's note holds the profile links. -->
       <div class="popover">
         <button class="popover-button name-button" type="button" aria-expanded="false" aria-controls="social-links" aria-describedby="name-hint">{SITE.shortName}</button>
-        <!-- The hint previews the list: the words, then the three icons small. -->
+        <!-- The hint is a speech bubble pointing at the name: what to do, then the three icons small. -->
         <span class="name-hint" id="name-hint" aria-hidden="true">
-          {SITE.nameHint}
+          <span class="hint-pointer">{SITE.nameHint.pointer}</span>
+          <span class="hint-touch">{SITE.nameHint.touch}</span>
           {profiles.map((p) => <svg {...icon} set:html={p.svg} />)}
         </span>
         <ul class="popover-note social-links" id="social-links">
