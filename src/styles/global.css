@@ -1033,14 +1033,60 @@ img {
 }
 
 /* Each column's intro, the same text as on its section page, set smaller
-   under the label in the title face. */
+   under the label in the title face. It stays folded away so the page rests
+   quiet, and opens while the pointer is over its column or keyboard focus is
+   inside it. Folded, it is still in the page for screen readers. On touch
+   screens it stays folded; the section page shows it in full. */
+.home-section-reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
 .home-section-about {
+  min-height: 0;
+  overflow: hidden;
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 1rem;
   line-height: 1.45;
   color: var(--muted);
-  margin: -0.5rem 0 1.25rem;
+  margin: 0;
+}
+
+/* The gap under the intro, as padding so it folds away with the text. */
+.home-section-about::after {
+  content: '';
+  display: block;
+  height: 1.25rem;
+}
+
+.home-section:focus-within .home-section-reveal {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-top: -0.5rem;
+}
+
+@media (hover: hover) {
+  .home-section:hover .home-section-reveal {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    margin-top: -0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-section-reveal {
+    transition:
+      grid-template-rows 350ms ease,
+      margin-top 350ms ease,
+      opacity 250ms ease;
+  }
+
+  .home-section:hover .home-section-reveal,
+  .home-section:focus-within .home-section-reveal {
+    transition-delay: 0ms, 0ms, 100ms;
+  }
 }
 
 .strips {

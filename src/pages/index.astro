@@ -33,7 +33,9 @@ const preloadImage = firstPost ? coverUrl(firstPost.data.cover) : undefined;
               <h2 class="home-label">
                 <a href={`/${section}/`}>{title}</a>
               </h2>
-              <p class="home-section-about">{about}</p>
+              <div class="home-section-reveal">
+                <p class="home-section-about">{about}</p>
+              </div>
               <div class="home-latest">
                 <PostStrips posts={posts} />
               </div>
