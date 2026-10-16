@@ -16,8 +16,8 @@ export const SITE = {
   cornerHint: 'Drag to move it, or push it off the side to hide it.',
   /** The footer name's hint, followed by the profile icons; it shows by itself for a few seconds when the footer comes into view. */
   nameHint: {
-    pointer: 'Click my name to find me on',
-    touch: 'Tap my name to find me on',
+    pointer: 'Find me on',
+    touch: 'Find me on',
   },
   /** The footer name's pop-up: the author's profiles, in the order shown. */
   social: {
