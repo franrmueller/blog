@@ -4,12 +4,15 @@ import PostStrips from '../components/PostStrips.astro';
 import { SECTIONS, SECTION_KEYS, SITE } from '../site';
 import { coverUrl, getPosts } from '../lib/posts';
 
+/** How many of each section's latest posts the home page shows. */
+const LATEST = 2;
+
 const columns = await Promise.all(
   SECTION_KEYS.map(async (section) => ({
     section,
     title: SECTIONS[section].title,
     about: SECTIONS[section].about,
-    posts: await getPosts(section),
+    posts: (await getPosts(section)).slice(0, LATEST),
   })),
 );
 
@@ -31,7 +34,23 @@ const preloadImage = firstPost ? coverUrl(firstPost.data.cover) : undefined;
                 <a href={`/${section}/`}>{title}</a>
               </h2>
               <p class="home-section-about">{about}</p>
-              <PostStrips posts={posts} />
+              <div class="home-latest">
+                <PostStrips posts={posts} />
+              </div>
+              {posts.length > 0 && (
+                <a
+                  class="home-more"
+                  href={`/${section}/`}
+                  aria-label={`All ${title} posts`}
+                  data-tip="See all articles"
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <circle cx="5" cy="12" r="1.75" />
+                    <circle cx="12" cy="12" r="1.75" />
+                    <circle cx="19" cy="12" r="1.75" />
+                  </svg>
+                </a>
+              )}
             </section>
           </>
         ))
